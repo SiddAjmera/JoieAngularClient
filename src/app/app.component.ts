@@ -2,24 +2,22 @@
 
 import { Component, OnInit, ViewChild } from '@angular/core';
 
+import { EmotionService } from './services/emotion/emotion.service';
+
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css']
 })
-export class AppComponent implements OnInit{
+export class AppComponent implements OnInit {
   title = 'Welcome to Joie!';
   subTitle = 'I\'m your very own mindfulness and mental wellbeing instructor! ¯\\_(ツ)_/¯';
-  context;
-  videoNativeElement;
-  canvasNativeElement;
-
+  constraints = { video: true };
+  context; videoNativeElement; canvasNativeElement; userImage;
   @ViewChild('userVideoStream') userVideoStream;
   @ViewChild('canvasToRenderUserImage') canvasToRenderUserImage;
 
-  constraints = {
-    video: true,
-  };
+  constructor(private emotionService: EmotionService) { }
 
   ngOnInit() {
     this.videoNativeElement = <HTMLVideoElement>this.userVideoStream.nativeElement;
@@ -28,23 +26,22 @@ export class AppComponent implements OnInit{
       this.videoNativeElement.srcObject = stream;
     });
     this.context = this.canvasNativeElement.getContext('2d');
-    
+
     let tracker = new tracking.ObjectTracker(['face']);
     tracking.track('#userVideoStream', tracker);
     tracker.on('track', event => {
-      if(event.data.length > 0) this.captureUserImage();
+      if (event.data.length > 0) this.captureUserImage();
     });
-
   }
 
   captureUserImage() {
-    this.context.drawImage(
-      this.userVideoStream.nativeElement, 
-      0, 
-      0, 
-      this.canvasNativeElement.width, 
-      this.canvasNativeElement.height
-    );
-    // this.videoNativeElement.srcObject.getVideoTracks().forEach(track => track.stop());
+    this.context.drawImage(this.userVideoStream.nativeElement, 0, 0, this.canvasNativeElement.width, this.canvasNativeElement.height);
+    this.stopVideoStream()
+    this.userImage = this.canvasNativeElement.toDataURL('image/jpeg', 0.1);
+    this.emotionService.getUserEmotion(this.userImage).subscribe(emotionData => console.log(emotionData));
+  }
+
+  stopVideoStream() {
+    this.videoNativeElement.srcObject.getVideoTracks().forEach(track => track.stop());
   }
 }
