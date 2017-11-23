@@ -1,9 +1,7 @@
-/// <reference path="../../node_modules/@types/tracking/index.d.ts"/>
 
 import { Component, OnInit, ViewChild } from '@angular/core';
-
 import { EmotionService } from './services/emotion/emotion.service';
-
+import * as tracking from 'tracking';
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
@@ -27,7 +25,11 @@ export class AppComponent implements OnInit {
     });
     this.context = this.canvasNativeElement.getContext('2d');
 
-    let tracker = new tracking.ObjectTracker(['face']);
+    const tracker = new tracking.ObjectTracker('face');
+
+    tracker.setInitialScale(4);
+    tracker.setStepSize(2);
+    tracker.setEdgesDensity(0.1);
     tracking.track('#userVideoStream', tracker);
     tracker.on('track', event => {
       if (event.data.length > 0) this.captureUserImage();
