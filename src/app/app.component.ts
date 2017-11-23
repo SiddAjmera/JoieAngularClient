@@ -11,7 +11,7 @@ export class AppComponent implements OnInit {
   title = 'Welcome to Joie!';
   subTitle = 'I\'m your very own mindfulness and mental wellbeing instructor! ¯\\_(ツ)_/¯';
   constraints = { video: true };
-  context; videoNativeElement; canvasNativeElement; userImage;
+  context; videoNativeElement; canvasNativeElement; userImage; userCurrentEmotion;
   @ViewChild('userVideoStream') userVideoStream;
   @ViewChild('canvasToRenderUserImage') canvasToRenderUserImage;
 
@@ -39,8 +39,13 @@ export class AppComponent implements OnInit {
   captureUserImage() {
     this.context.drawImage(this.userVideoStream.nativeElement, 0, 0, this.canvasNativeElement.width, this.canvasNativeElement.height);
     this.stopVideoStream()
-    this.userImage = this.canvasNativeElement.toDataURL('image/jpeg', 0.1);
-    this.emotionService.getUserEmotion(this.userImage).subscribe(emotionData => console.log(emotionData));
+    this.userImage = this.canvasNativeElement.toDataURL('image/jpeg', 1);
+    this.emotionService.getUserEmotion(this.userImage).subscribe(emotionData => {
+      let userEmotions = emotionData[0].scores;
+      let emotionsArray = Object.keys(userEmotions);
+      let emotionValues = Object.values(userEmotions);
+      this.userCurrentEmotion = emotionsArray[emotionValues.indexOf(Math.max(...emotionValues))];
+    });
   }
 
   stopVideoStream() {
