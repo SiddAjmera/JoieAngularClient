@@ -9,5 +9,6 @@
     <button class="btn btn-warning" (click)="stopVideoStream()">Stop User Video Stream</button>
     <br>
     <canvas #canvasToRenderUserImage width=320 height=240></canvas>
+    <h1 *ngIf="userCurrentEmotion">Your Current Emotion is: {{ userCurrentEmotion }}</h1>
   </div>
 </div>

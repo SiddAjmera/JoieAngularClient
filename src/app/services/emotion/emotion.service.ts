@@ -10,9 +10,9 @@ export class EmotionService {
 
   getUserEmotion(userImageBlob) {
     let headers = new HttpHeaders();
-    headers = headers.set('Ocp-Apim-Subscription-Key', 'Your-Subscription-Key-Here');
+    headers = headers.set('Ocp-Apim-Subscription-Key', 'your-api-key-here');
     headers = headers.set('Content-Type', 'application/octet-stream');
-    return this.http.post(this.apiUrl, { "data": this.makeBlob(userImageBlob) }, { headers: headers });
+    return this.http.post(this.apiUrl, this.makeBlob(userImageBlob), { headers: headers });
   }
 
   makeBlob(dataURL) {
