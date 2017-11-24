@@ -1,6 +1,7 @@
+<br>
 <button class="btn btn-success" (click)="startRecognition()">Start Recognition</button>
 <hr>
-<p>Messages</p>
+<strong>MESSAGES</strong>
 <ul class="list-group">
   <li class="list-group-item"
       *ngFor="let message of messages; let i = index;"
@@ -8,3 +9,5 @@
       {{message}}
   </li>
 </ul>
+<hr>
+<input type="file" name="audio" accept="audio/*" capture="microphone" (change)="userInputChanged($event)">
