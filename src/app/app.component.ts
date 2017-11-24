@@ -1,7 +1,11 @@
 
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { EmotionService } from './services/emotion/emotion.service';
-import * as tracking from 'tracking';
+import 'tracking/build/tracking';
+import 'tracking/build/data/face';
+
+declare var window: any;
+declare var tracking: any;
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
