@@ -2,14 +2,6 @@
   <h1>{{title}}</h1>
   <h2>{{subTitle}}</h2>
   <hr>
-  <div class="form-group">
-    <video id="userVideoStream" #userVideoStream autoplay></video>
-    <br>
-    <button class="btn btn-success" (click)="captureUserImage()">Capture User Image</button>
-    <button class="btn btn-warning" (click)="stopVideoStream()">Stop User Video Stream</button>
-    <hr>
-    <canvas #canvasToRenderUserImage width=320 height=240></canvas>
-    <hr>
-    <h1 *ngIf="userCurrentEmotion">Your Current Emotion is: {{ userCurrentEmotion }}</h1>
-  </div>
+  <a routerLink="/emotion">Emotion</a> | <a routerLink="/chat">Chat</a>
+  <router-outlet></router-outlet>
 </div>
