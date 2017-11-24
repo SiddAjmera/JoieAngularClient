@@ -7,8 +7,9 @@
     <br>
     <button class="btn btn-success" (click)="captureUserImage()">Capture User Image</button>
     <button class="btn btn-warning" (click)="stopVideoStream()">Stop User Video Stream</button>
-    <br>
+    <hr>
     <canvas #canvasToRenderUserImage width=320 height=240></canvas>
+    <hr>
     <h1 *ngIf="userCurrentEmotion">Your Current Emotion is: {{ userCurrentEmotion }}</h1>
   </div>
 </div>
