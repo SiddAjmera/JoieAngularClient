@@ -5,6 +5,10 @@
 /tmp
 /out-tsc
 
+#ignore files
+.firebaserc
+firebase.json
+
 # dependencies
 /node_modules
 
