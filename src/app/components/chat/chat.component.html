@@ -1,0 +1,10 @@
+<button class="btn btn-success" (click)="startRecognition()">Start Recognition</button>
+<hr>
+<p>Messages</p>
+<ul class="list-group">
+  <li class="list-group-item"
+      *ngFor="let message of messages; let i = index;"
+      ngClass="i % 2 === 0 ? 'alert-success': 'alert-danger'">
+      {{message}}
+  </li>
+</ul>
