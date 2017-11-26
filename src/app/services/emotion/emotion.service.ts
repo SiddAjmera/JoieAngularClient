@@ -1,6 +1,8 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 
+import { environment } from './../../../environments/environment.prod';
+
 @Injectable()
 export class EmotionService {
 
@@ -10,7 +12,7 @@ export class EmotionService {
 
   getUserEmotion(userImageBlob) {
     let headers = new HttpHeaders();
-    headers = headers.set('Ocp-Apim-Subscription-Key', 'your-api-key');
+    headers = headers.set('Ocp-Apim-Subscription-Key', environment.apiKeys.emotion);
     headers = headers.set('Content-Type', 'application/octet-stream');
     return this.http.post(this.apiUrl, this.makeBlob(userImageBlob), { headers: headers });
   }

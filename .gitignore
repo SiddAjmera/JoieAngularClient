@@ -42,6 +42,9 @@ yarn-error.log
 /e2e/*.js
 /e2e/*.map
 
+# environments
+/src/environments/environment.prod.ts
+
 # System Files
 .DS_Store
 Thumbs.db
