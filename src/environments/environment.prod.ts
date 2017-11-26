@@ -4,6 +4,9 @@ export const environment = {
     'webEmpath': 'your-api-key-here',
     'dialogFlow': 'your-api-key-here',
     'emotion': 'your-api-key-here',
-    'beyondVerbal': 'your-api-key-here'
+    'beyondVerbal': 'your-api-key-here',
+    'youtubeAPIKey': 'your-api-key-here',
+    'youtubeClientId': 'your-api-key-here',
+    'youtubeClientSecret': 'your-api-key-here'
   }
 };

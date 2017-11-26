@@ -1,10 +1,12 @@
+import { SuggestionsService } from './../../services/suggestions/suggestions.service';
 import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { Router } from '@angular/router';
 
 import { BeyondVerbalService } from '../../services/beyond-verbal/beyond-verbal.service';
 import { DialogFlowClient } from '../../dialog-flow/dialog-flow.client';
 import { environment } from './../../../environments/environment.prod';
-import { UserInfo } from './../../models/user-info/user-info';
+import { UserInfo } from '../../models/user-info';
+import { UserInfoService } from './../../services/user-info/user-info.service';
 import { WebempathService } from './../../services/webempath/webempath.service';
 
 @Component({
@@ -21,13 +23,17 @@ export class ChatComponent implements OnInit {
     private ref: ChangeDetectorRef, 
     private webEmpath: WebempathService, 
     private beyondVerbal: BeyondVerbalService,
-    private router: Router
+    private router: Router,
+    private userInfoService: UserInfoService,
+    private suggestionsService: SuggestionsService
   ) { }
 
   ngOnInit() {
+    this.userInfo = this.userInfoService.getUserInfo();
     this.recognition = new (<any>window).webkitSpeechRecognition();
     this.notification = new Audio('../../../assets/google_now_tone.mp3');
     // this.analyzeVoice();
+    this.suggestionsService.getSuggestionsForUser();
   }
 
   analyzeVoice() {

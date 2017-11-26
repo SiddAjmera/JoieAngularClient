@@ -8,6 +8,9 @@ import { ChatComponent } from './components/chat/chat.component';
 import { EmotionComponent } from './components/emotion/emotion.component';
 import { EmotionService } from './services/emotion/emotion.service';
 import { RoutingModule } from './routing/routing.module';
+import { SuggestionsService } from './services/suggestions/suggestions.service';
+import { TransformService } from './services/transform/transform.service';
+import { UserInfoService } from './services/user-info/user-info.service';
 import { WebempathService } from './services/webempath/webempath.service';
 
 @NgModule({
@@ -21,7 +24,15 @@ import { WebempathService } from './services/webempath/webempath.service';
     HttpClientModule,
     RoutingModule
   ],
-  providers: [ EmotionService, WebempathService, BeyondVerbalService ],
+  providers: [ 
+    BeyondVerbalService,
+    EmotionService,
+    SuggestionsService,
+    TransformService,
+    UserInfoService,
+    WebempathService
+    
+  ],
   bootstrap: [ AppComponent ]
 })
 export class AppModule { }
