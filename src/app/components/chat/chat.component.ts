@@ -16,6 +16,7 @@ export class ChatComponent implements OnInit {
   recognition; recorder;
   messages: string[] = [];
   userInfo: UserInfo;
+  notification;
   constructor(
     private ref: ChangeDetectorRef, 
     private webEmpath: WebempathService, 
@@ -25,6 +26,7 @@ export class ChatComponent implements OnInit {
 
   ngOnInit() {
     this.recognition = new (<any>window).webkitSpeechRecognition();
+    this.notification = new Audio('../../../assets/google_now_tone.mp3');
     // this.analyzeVoice();
   }
 
@@ -64,6 +66,7 @@ export class ChatComponent implements OnInit {
   }
 
   startRecognition() {
+    this.notification.play();
     this.recognition.start();
     // this.recorder.start();
     this.recognition.onresult = event => {
@@ -92,5 +95,8 @@ export class ChatComponent implements OnInit {
   speakIt(botSaid) {
     let msg = new SpeechSynthesisUtterance(botSaid);
     (<any>window).speechSynthesis.speak(msg);
+    msg.onend = (event) => {
+      this.startRecognition();
+    }
   }
 }
