@@ -44,10 +44,14 @@ export class EmotionComponent implements OnInit {
     this.stopVideoStream()
     this.userImage = this.canvasNativeElement.toDataURL('image/jpeg', 1);
     this.emotionService.getUserEmotion(this.userImage).subscribe(emotionData => {
-      let userEmotions = emotionData[0].scores;
-      let emotionsArray = Object.keys(userEmotions);
-      let emotionValues = Object.values(userEmotions);
-      this.userCurrentEmotion = emotionsArray[emotionValues.indexOf(Math.max(...emotionValues))];
+      if(emotionData['length'] > 0) {
+        let userEmotions = emotionData[0].scores;
+        let emotionsArray = Object.keys(userEmotions);
+        let emotionValues = Object.values(userEmotions);
+        this.userCurrentEmotion = emotionsArray[emotionValues.indexOf(Math.max(...emotionValues))];
+      } else {
+        this.ngOnInit();
+      }
     });
   }
 
