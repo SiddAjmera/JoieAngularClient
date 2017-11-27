@@ -14,7 +14,7 @@ declare var tracking: any;
 export class EmotionComponent implements OnInit {
 
   constraints = { video: true };
-  context; videoNativeElement; canvasNativeElement; userImage; userCurrentEmotion;
+  context; videoNativeElement; canvasNativeElement; userImage; userPrimaryEmotion; userSecondaryEmotion;
   @ViewChild('userVideoStream') userVideoStream;
   @ViewChild('canvasToRenderUserImage') canvasToRenderUserImage;
 
@@ -47,8 +47,13 @@ export class EmotionComponent implements OnInit {
       if(emotionData['length'] > 0) {
         let userEmotions = emotionData[0].scores;
         let emotionsArray = Object.keys(userEmotions);
-        let emotionValues = Object.values(userEmotions);
-        this.userCurrentEmotion = emotionsArray[emotionValues.indexOf(Math.max(...emotionValues))];
+        let originalEmotionValues = Object.values(userEmotions);
+        let emotionValues = originalEmotionValues.slice();
+        let maximum = Math.max.apply(null, originalEmotionValues); // get the max of the array
+        this.userPrimaryEmotion = emotionsArray[originalEmotionValues.indexOf(maximum)];
+        emotionValues.splice(originalEmotionValues.indexOf(maximum), 1); // remove max from the array
+        let secondMax = Math.max.apply(null, emotionValues); // get the 2nd max
+        this.userSecondaryEmotion = emotionsArray[originalEmotionValues.indexOf(secondMax)];
       } else {
         this.ngOnInit();
       }

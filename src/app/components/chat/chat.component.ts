@@ -87,7 +87,10 @@ export class ChatComponent implements OnInit {
           console.log(this.userInfo);
         }
         if(dialogFlowResponse['parameters'] && dialogFlowResponse['parameters']['permission'] === 'true') {
+          dialogFlowResponse.fulfillment['speech'] = 'Great! I\'ll just click a snap of you, analyze your mood and then suggest you somethings!';
           this.router.navigate(['/emotion']);
+        } else {
+          dialogFlowResponse.fulfillment['speech'] = 'Okay. No issues! I\'ll analyze your mood with whatever I have and then suggest you somethings!';
         }
         let botSaid = dialogFlowResponse.fulfillment['speech'];
         this.speakIt(botSaid);
