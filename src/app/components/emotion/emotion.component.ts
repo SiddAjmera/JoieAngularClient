@@ -1,8 +1,10 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, AfterViewInit } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
 import 'tracking/build/tracking';
 import 'tracking/build/data/face';
 
 import { EmotionService } from './../../services/emotion/emotion.service';
+import { MessageService } from '../../services/message/message.service';
 
 declare var window: any;
 declare var tracking: any;
@@ -11,32 +13,42 @@ declare var tracking: any;
   templateUrl: './emotion.component.html',
   styleUrls: ['./emotion.component.css']
 })
-export class EmotionComponent implements OnInit {
+export class EmotionComponent implements OnInit, AfterViewInit {
 
-  constraints = { video: true };
   context; videoNativeElement; canvasNativeElement; userImage; userPrimaryEmotion; userSecondaryEmotion;
   @ViewChild('userVideoStream') userVideoStream;
   @ViewChild('canvasToRenderUserImage') canvasToRenderUserImage;
 
-  constructor(private emotionService: EmotionService) { }
+  constructor(
+    private emotionService: EmotionService, 
+    private route: ActivatedRoute, 
+    private messageService: MessageService,
+    private router: Router
+  ) { }
 
   ngOnInit() {
-    this.videoNativeElement = <HTMLVideoElement>this.userVideoStream.nativeElement;
-    this.canvasNativeElement = <HTMLCanvasElement>this.canvasToRenderUserImage.nativeElement;
-    navigator.mediaDevices.getUserMedia(this.constraints).then(stream => {
-      this.videoNativeElement.srcObject = stream;
+    this.route.params.subscribe((params) => {
+      this.videoNativeElement = <HTMLVideoElement>this.userVideoStream.nativeElement;
+      this.canvasNativeElement = <HTMLCanvasElement>this.canvasToRenderUserImage.nativeElement;
+      navigator.mediaDevices.getUserMedia({ video: true }).then(stream => {
+        this.videoNativeElement.srcObject = stream;
+      });
+      this.context = this.canvasNativeElement.getContext('2d');
+  
+      const tracker = new tracking.ObjectTracker('face');
+  
+      tracker.setInitialScale(4);
+      tracker.setStepSize(2);
+      tracker.setEdgesDensity(0.1);
+      tracking.track('#userVideoStream', tracker);
+      tracker.on('track', event => {
+        if (event.data.length > 0) this.captureUserImage();
+      });
     });
-    this.context = this.canvasNativeElement.getContext('2d');
+  }
 
-    const tracker = new tracking.ObjectTracker('face');
-
-    tracker.setInitialScale(4);
-    tracker.setStepSize(2);
-    tracker.setEdgesDensity(0.1);
-    tracking.track('#userVideoStream', tracker);
-    tracker.on('track', event => {
-      if (event.data.length > 0) this.captureUserImage();
-    });
+  ngAfterViewInit() {
+    
   }
 
   captureUserImage() {
@@ -54,6 +66,12 @@ export class EmotionComponent implements OnInit {
         emotionValues.splice(originalEmotionValues.indexOf(maximum), 1); // remove max from the array
         let secondMax = Math.max.apply(null, emotionValues); // get the 2nd max
         this.userSecondaryEmotion = emotionsArray[originalEmotionValues.indexOf(secondMax)];
+        this.messageService.addMessage({
+          time: new Date().toString(),
+          sender: 'BOT',
+          message: `Your primary emotion is ${this.userPrimaryEmotion} and your secondary emotion is ${this.userSecondaryEmotion}`
+        });
+        this.router.navigate(['/chat']);
       } else {
         this.ngOnInit();
       }

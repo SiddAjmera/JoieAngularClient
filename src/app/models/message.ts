@@ -1,4 +1,4 @@
-export class Message {
+export interface IMessage {
     time: string;
     sender: string;
     message: string;

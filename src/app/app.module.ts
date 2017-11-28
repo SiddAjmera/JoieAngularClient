@@ -7,6 +7,7 @@ import { BeyondVerbalService } from './services/beyond-verbal/beyond-verbal.serv
 import { ChatComponent } from './components/chat/chat.component';
 import { EmotionComponent } from './components/emotion/emotion.component';
 import { EmotionService } from './services/emotion/emotion.service';
+import { MessageService } from './services/message/message.service';
 import { RoutingModule } from './routing/routing.module';
 import { SuggestionsService } from './services/suggestions/suggestions.service';
 import { TransformService } from './services/transform/transform.service';
@@ -27,6 +28,7 @@ import { WebempathService } from './services/webempath/webempath.service';
   providers: [ 
     BeyondVerbalService,
     EmotionService,
+    MessageService,
     SuggestionsService,
     TransformService,
     UserInfoService,

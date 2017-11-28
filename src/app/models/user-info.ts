@@ -15,7 +15,7 @@ export enum Emotion {
     SURPRISE = 'SURPRISE',
 } */
 
-export class UserInfo {
+export interface IUserInfo {
     day?: string;
     friend?: boolean;
     workout?: boolean;

@@ -1,13 +1,15 @@
 import { SuggestionsService } from './../../services/suggestions/suggestions.service';
-import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef, NgZone } from '@angular/core';
 import { Router } from '@angular/router';
 
 import { BeyondVerbalService } from '../../services/beyond-verbal/beyond-verbal.service';
 import { DialogFlowClient } from '../../dialog-flow/dialog-flow.client';
 import { environment } from './../../../environments/environment.prod';
-import { UserInfo } from '../../models/user-info';
+import { MessageService } from '../../services/message/message.service';
+import { IUserInfo } from '../../models/user-info';
 import { UserInfoService } from './../../services/user-info/user-info.service';
 import { WebempathService } from './../../services/webempath/webempath.service';
+import { IMessage } from '../../models/message';
 
 @Component({
   selector: 'app-chat',
@@ -16,8 +18,8 @@ import { WebempathService } from './../../services/webempath/webempath.service';
 })
 export class ChatComponent implements OnInit {
   recognition; recorder;
-  messages: string[] = [];
-  userInfo: UserInfo;
+  messages: IMessage[] = [];
+  userInfo: IUserInfo;
   notification;
   dialogEnded: boolean = false;
   constructor(
@@ -26,7 +28,9 @@ export class ChatComponent implements OnInit {
     private beyondVerbal: BeyondVerbalService,
     private router: Router,
     private userInfoService: UserInfoService,
-    private suggestionsService: SuggestionsService
+    private suggestionsService: SuggestionsService,
+    private messageService: MessageService,
+    private zone: NgZone
   ) { }
 
   ngOnInit() {
@@ -35,6 +39,7 @@ export class ChatComponent implements OnInit {
     this.notification = new Audio('../../../assets/google_now_tone.mp3');
     // this.analyzeVoice();
     this.suggestionsService.getSuggestionsForUser();
+    this.messageService.messagesUpdated.subscribe(messages => this.messages = messages);
   }
 
   analyzeVoice() {
@@ -79,7 +84,7 @@ export class ChatComponent implements OnInit {
     this.recognition.onresult = event => {
       // this.recorder.stop();
       let userSaid = event.results[0][0].transcript;
-      this.messages.push(userSaid);
+      this.composeMessageObject(userSaid, 'USER');
       this.ref.detectChanges();
       DialogFlowClient.textRequest(userSaid).then(response => {
         let dialogFlowResponse = response.result;
@@ -90,15 +95,14 @@ export class ChatComponent implements OnInit {
         if(dialogFlowResponse['parameters'] && dialogFlowResponse['parameters']['permission'] === 'true') {
           dialogFlowResponse.fulfillment['speech'] = 'Great! I\'ll just click a snap of you, analyze your mood and then suggest you somethings!';
           this.dialogEnded = true;
-          this.router.navigate(['/emotion']);
         } else if(dialogFlowResponse['parameters'] && dialogFlowResponse['parameters']['permission'] === 'false') {
           dialogFlowResponse.fulfillment['speech'] = 'Okay. No issues! I\'ll analyze your mood with whatever I have and then suggest you somethings!';
           this.dialogEnded = true;
         }
         let botSaid = dialogFlowResponse.fulfillment['speech'];
         this.speakIt(botSaid);
-        this.messages.push(botSaid);
-        this.ref.detectChanges();
+        this.composeMessageObject(botSaid, 'BOT');
+        if(!this.dialogEnded) this.ref.detectChanges();
         console.log(this.messages);
       });
     }
@@ -108,7 +112,15 @@ export class ChatComponent implements OnInit {
     let msg = new SpeechSynthesisUtterance(botSaid);
     (<any>window).speechSynthesis.speak(msg);
     msg.onend = (event) => {
-      if(!this.dialogEnded) this.startRecognition();
+      this.dialogEnded ? this.zone.run(() => this.router.navigate(['/emotion'])) : this.startRecognition();
     }
+  }
+
+  composeMessageObject(messageText, sender) {
+    this.messageService.addMessage({
+      time: new Date().toString(),
+      message: messageText,
+      sender: sender
+    });
   }
 }

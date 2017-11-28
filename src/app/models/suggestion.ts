@@ -1,2 +1,2 @@
-export class Suggestion {
+export interface ISuggestion {
 }

@@ -6,7 +6,7 @@
   <li class="list-group-item"
       *ngFor="let message of messages; let i = index;"
       ngClass="i % 2 === 0 ? 'alert-success': 'alert-danger'">
-      {{message}}
+      {{message.message}}
   </li>
 </ul>
 <hr>

@@ -2,16 +2,16 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 
 import { environment } from './../../../environments/environment.prod';
-import { Suggestion } from '../../models/suggestion';
+import { ISuggestion } from '../../models/suggestion';
 import { TransformService } from './../transform/transform.service';
-import { UserInfo } from '../../models/user-info';
+import { IUserInfo } from '../../models/user-info';
 import { UserInfoService } from '../user-info/user-info.service';
 
 @Injectable()
 export class SuggestionsService {
 
-  private userInfo: UserInfo;
-  private suggestionsForUser: Suggestion[] = [];
+  private userInfo: IUserInfo;
+  private suggestionsForUser: ISuggestion[] = [];
 
   constructor(
     private userInfoService: UserInfoService,
