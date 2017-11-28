@@ -19,6 +19,7 @@ export class ChatComponent implements OnInit {
   messages: string[] = [];
   userInfo: UserInfo;
   notification;
+  dialogEnded: boolean = false;
   constructor(
     private ref: ChangeDetectorRef, 
     private webEmpath: WebempathService, 
@@ -88,9 +89,11 @@ export class ChatComponent implements OnInit {
         }
         if(dialogFlowResponse['parameters'] && dialogFlowResponse['parameters']['permission'] === 'true') {
           dialogFlowResponse.fulfillment['speech'] = 'Great! I\'ll just click a snap of you, analyze your mood and then suggest you somethings!';
+          this.dialogEnded = true;
           this.router.navigate(['/emotion']);
-        } else {
+        } else if(dialogFlowResponse['parameters'] && dialogFlowResponse['parameters']['permission'] === 'false') {
           dialogFlowResponse.fulfillment['speech'] = 'Okay. No issues! I\'ll analyze your mood with whatever I have and then suggest you somethings!';
+          this.dialogEnded = true;
         }
         let botSaid = dialogFlowResponse.fulfillment['speech'];
         this.speakIt(botSaid);
@@ -105,7 +108,7 @@ export class ChatComponent implements OnInit {
     let msg = new SpeechSynthesisUtterance(botSaid);
     (<any>window).speechSynthesis.speak(msg);
     msg.onend = (event) => {
-      this.startRecognition();
+      if(!this.dialogEnded) this.startRecognition();
     }
   }
 }

@@ -7,7 +7,7 @@ import { EmotionComponent } from '../components/emotion/emotion.component';
 const appRoutes: Routes = [
   { path: 'emotion', component: EmotionComponent },
   { path: 'chat', component: ChatComponent },
-  { path: '**', redirectTo: '/emotion', pathMatch: 'full' }
+  { path: '**', redirectTo: '/chat', pathMatch: 'full' }
 ];
 
 @NgModule({
