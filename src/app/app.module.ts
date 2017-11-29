@@ -13,12 +13,14 @@ import { SuggestionsService } from './services/suggestions/suggestions.service';
 import { TransformService } from './services/transform/transform.service';
 import { UserInfoService } from './services/user-info/user-info.service';
 import { WebempathService } from './services/webempath/webempath.service';
+import { IntroComponent } from './components/intro/intro.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     ChatComponent,
-    EmotionComponent
+    EmotionComponent,
+    IntroComponent
   ],
   imports: [ 
     BrowserModule,
