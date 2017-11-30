@@ -40,7 +40,10 @@ export class ChatComponent implements OnInit {
     this.notification = new Audio('../../../assets/google_now_tone.mp3');
     // this.analyzeVoice();
     this.suggestionsService.getSuggestionsForUser();
-    this.messageService.messagesUpdated.subscribe(messages => this.messages = messages);
+    this.messages = this.messageService.getMessages();
+    this.messageService.messagesUpdated.subscribe(messages => {
+      this.messages = messages;
+    });
   }
 
   analyzeVoice() {
