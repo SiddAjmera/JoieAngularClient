@@ -1,4 +1,6 @@
-<strong>MESSAGES</strong>
+<div class="align-center">
+  <strong>MESSAGES</strong>
+</div>
 <ul class="list-group">
   <li class="list-group-item"
       *ngFor="let message of messages; let i = index;"
@@ -8,8 +10,12 @@
 </ul>
 <hr>
 <div class="chat-box-container">
-  <input type="text" class="msg-text-box" placeholder="Don't be shy! Break the ice!" [(ngModel)]="textMessage">
-  <a class="chat-send-btn" (click)="startRecognition()">
+  <input type="text" 
+         class="msg-text-box" 
+         placeholder="Don't be shy! Break the ice!" 
+         [(ngModel)]="textMessage"
+         (keyup.enter)="queryDialogFlow(textMessage)">
+  <a class="chat-send-btn" (click)="textMessage.length === 0 ? startRecognition() : queryDialogFlow(textMessage)">
     <i class="fa icon" [ngClass]="textMessage.length === 0 ? 'fa-microphone' : 'fa-paper-plane'"></i>
   </a>
 </div>

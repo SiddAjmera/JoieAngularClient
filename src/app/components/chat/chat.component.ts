@@ -81,32 +81,33 @@ export class ChatComponent implements OnInit {
   startRecognition() {
     this.notification.play();
     this.recognition.start();
-    // this.recorder.start();
     this.recognition.onresult = event => {
-      // this.recorder.stop();
-      let userSaid = event.results[0][0].transcript;
-      this.composeMessageObject(userSaid, 'USER');
-      this.ref.detectChanges();
-      DialogFlowClient.textRequest(userSaid).then(response => {
-        let dialogFlowResponse = response.result;
-        if(dialogFlowResponse.action === 'get.user.info') {
-          this.userInfo = dialogFlowResponse['parameters'];
-          console.log(this.userInfo);
-        }
-        if(dialogFlowResponse['parameters'] && dialogFlowResponse['parameters']['permission'] === 'true') {
-          dialogFlowResponse.fulfillment['speech'] = 'Great! I\'ll just click a snap of you, analyze your mood and then suggest you somethings!';
-          this.dialogEnded = true;
-        } else if(dialogFlowResponse['parameters'] && dialogFlowResponse['parameters']['permission'] === 'false') {
-          dialogFlowResponse.fulfillment['speech'] = 'Okay. No issues! I\'ll analyze your mood with whatever I have and then suggest you somethings!';
-          this.dialogEnded = true;
-        }
-        let botSaid = dialogFlowResponse.fulfillment['speech'];
-        this.speakIt(botSaid);
-        this.composeMessageObject(botSaid, 'BOT');
-        if(!this.dialogEnded) this.ref.detectChanges();
-        console.log(this.messages);
-      });
+      this.queryDialogFlow(event.results[0][0].transcript);
     }
+  }
+
+  queryDialogFlow(userMessage) {
+    this.textMessage = '';
+    this.composeMessageObject(userMessage, 'USER');
+    DialogFlowClient.textRequest(userMessage).then(response => {
+      let dialogFlowResponse = response.result;
+      if(dialogFlowResponse.action === 'get.user.info') {
+        this.userInfo = dialogFlowResponse['parameters'];
+        console.log(this.userInfo);
+      }
+      if(dialogFlowResponse['parameters'] && dialogFlowResponse['parameters']['permission'] === 'true') {
+        dialogFlowResponse.fulfillment['speech'] = 'Great! I\'ll just click a snap of you, analyze your mood and then suggest you somethings!';
+        this.dialogEnded = true;
+      } else if(dialogFlowResponse['parameters'] && dialogFlowResponse['parameters']['permission'] === 'false') {
+        dialogFlowResponse.fulfillment['speech'] = 'Okay. No issues! I\'ll analyze your mood with whatever I have and then suggest you somethings!';
+        this.dialogEnded = true;
+      }
+      let botSaid = dialogFlowResponse.fulfillment['speech'];
+      this.speakIt(botSaid);
+      this.composeMessageObject(botSaid, 'BOT');
+      if(!this.dialogEnded) this.ref.detectChanges();
+      console.log(this.messages);
+    });
   }
 
   speakIt(botSaid) {
@@ -123,5 +124,6 @@ export class ChatComponent implements OnInit {
       message: messageText,
       sender: sender
     });
+    this.ref.detectChanges();
   }
 }

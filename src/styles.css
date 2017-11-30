@@ -2,3 +2,7 @@
 @import "~font-awesome/css/font-awesome.min.css";
 @import "~bootstrap/dist/css/bootstrap.min.css";
 @import "~mdbootstrap/css/mdb.min.css";
+
+.align-center {
+    text-align: center;
+}
