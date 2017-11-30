@@ -1,23 +1,11 @@
 <ngb-carousel>
-    <ng-template ngbSlide>
-        <img src="https://mdbootstrap.com/img/Photos/Slides/img%20(130).jpg" class="carousel-img width-100" alt="Random first slide">
+    <ng-template ngbSlide *ngFor="let contentItem of slideContent">
+        <img [src]="contentItem.imageUrl" 
+             class="carousel-img width-100" 
+             alt="Random first slide">
         <div class="carousel-caption">
-            <h3>First slide label</h3>
-            <p>Nulla vitae elit libero, a pharetra augue mollis interdum.</p>
-        </div>
-    </ng-template>
-    <ng-template ngbSlide>
-        <img src="https://mdbootstrap.com/img/Photos/Slides/img%20(129).jpg" class="carousel-img width-100" alt="Random second slide">
-        <div class="carousel-caption">
-            <h3>Second slide label</h3>
-            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
-        </div>
-    </ng-template>
-    <ng-template ngbSlide>
-        <img src="https://mdbootstrap.com/img/Photos/Slides/img%20(70).jpg" class="carousel-img width-100" alt="Random third slide">
-        <div class="carousel-caption">
-            <h3>Third slide label</h3>
-            <p>Praesent commodo cursus magna, vel scelerisque nisl consectetur.</p>
+            <h3>{{contentItem.title}}</h3>
+            <p>{{contentItem.description}}</p>
         </div>
     </ng-template>
 </ngb-carousel>
