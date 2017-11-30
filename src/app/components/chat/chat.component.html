@@ -8,6 +8,24 @@
       {{message.message}}
   </li>
 </ul>
+<!--Card-->
+<div *ngIf="suggestions" class="v-scroll-row">
+  <div class="card v-scroll-card" *ngFor="let video of suggestions">
+      <!--Card image-->
+      <img class="img-fluid" 
+          [src]="video.smallTN" 
+          [alt]="video.title">
+      <!--Card content-->
+      <div class="card-body">
+        <!--Title-->
+        <h4 class="card-title">{{ video.title }}</h4>
+        <!--Text-->
+        <p class="card-text">{{ video.description }}</p>
+        <!-- <a href="#" class="btn btn-primary">Button</a> -->
+      </div>
+  </div>
+</div>
+<!--/.Card-->
 <hr>
 <div class="chat-box-container">
   <input type="text" 

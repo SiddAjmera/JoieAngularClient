@@ -41,3 +41,13 @@
     width: 90%
   }
 }
+.v-scroll-card {
+  display: inline-flex !important;
+  float: none !important;
+  width: 60%;
+  margin: 0px 5px 0px 0px;
+}
+.v-scroll-row {
+  overflow-x: auto;
+  white-space: nowrap;
+}

@@ -24,6 +24,7 @@ export class ChatComponent implements OnInit {
   notification;
   dialogEnded: boolean = false;
   textMessage: string = '';
+  suggestions = [];
   constructor(
     private ref: ChangeDetectorRef, 
     private webEmpath: WebempathService, 
@@ -46,6 +47,12 @@ export class ChatComponent implements OnInit {
     this.messageService.messagesUpdated.subscribe(messages => {
       this.messages = messages;
     });
+    if(this.dialogEnded) {
+      this.suggestionsService.getSuggestionsForUser()
+        .subscribe(videos => {
+          this.suggestions = videos;
+        });
+    }
   }
 
   analyzeVoice() {

@@ -1,11 +1,12 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import 'rxjs/add/operator/map';
 
 import { environment } from './../../../environments/environment.prod';
 import { ISuggestion } from '../../models/suggestion';
-import { TransformService } from './../transform/transform.service';
 import { IUserInfo } from '../../models/user-info';
 import { UserInfoService } from '../user-info/user-info.service';
+import { UtilsService } from './../utils/utils.service';
 
 @Injectable()
 export class SuggestionsService {
@@ -15,7 +16,7 @@ export class SuggestionsService {
 
   constructor(
     private userInfoService: UserInfoService,
-    private transformService: TransformService,
+    private utilsService: UtilsService,
     private http: HttpClient
   ) { }
 
@@ -43,10 +44,8 @@ export class SuggestionsService {
     Object.keys(this.userInfo).forEach((key) => {
       this.suggestActivityForFactor(key);
     }); */
-    this.http.get(`https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=25&q=meditation&type=videos&key=${environment.apiKeys.youtubeAPIKey}`)
-      .subscribe(response => {
-        let videos = this.transformService.getRelevantYoutubeData(response);
-      });
+    return this.http.get(`https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=25&q=meditation&type=videos&key=${environment.apiKeys.youtubeAPIKey}`)
+      .map(response => this.utilsService.getRelevantYoutubeData(response));
   }
 
   suggestActivityForFactor(factor) {
