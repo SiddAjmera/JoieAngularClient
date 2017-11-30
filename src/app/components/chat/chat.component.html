@@ -1,6 +1,3 @@
-<br>
-<button class="btn btn-success" (click)="startRecognition()">Start Recognition</button>
-<hr>
 <strong>MESSAGES</strong>
 <ul class="list-group">
   <li class="list-group-item"
@@ -10,4 +7,9 @@
   </li>
 </ul>
 <hr>
-<!-- <input type="file" name="audio" accept="audio/*" capture="microphone" (change)="userInputChanged($event)"> -->
+<div class="chat-box-container">
+  <input type="text" class="msg-text-box" placeholder="Don't be shy! Break the ice!" [(ngModel)]="textMessage">
+  <a class="chat-send-btn" (click)="startRecognition()">
+    <i class="fa icon" [ngClass]="textMessage.length === 0 ? 'fa-microphone' : 'fa-paper-plane'"></i>
+  </a>
+</div>

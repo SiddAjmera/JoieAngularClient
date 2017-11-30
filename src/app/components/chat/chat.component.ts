@@ -22,6 +22,7 @@ export class ChatComponent implements OnInit {
   userInfo: IUserInfo;
   notification;
   dialogEnded: boolean = false;
+  textMessage: string = '';
   constructor(
     private ref: ChangeDetectorRef, 
     private webEmpath: WebempathService, 

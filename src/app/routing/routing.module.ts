@@ -9,7 +9,7 @@ const appRoutes: Routes = [
   { path: 'emotion', component: EmotionComponent },
   { path: 'chat', component: ChatComponent },
   { path: 'intro', component: IntroComponent },
-  { path: '**', redirectTo: '/chat', pathMatch: 'full' }
+  { path: '**', redirectTo: '/intro', pathMatch: 'full' }
 ];
 
 @NgModule({

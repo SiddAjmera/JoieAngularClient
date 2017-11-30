@@ -1,6 +1,8 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { HttpClientModule } from '@angular/common/http';
+import { FormsModule } from '@angular/forms';
 import { NgModule } from '@angular/core';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 import { AppComponent } from './app.component';
 import { BeyondVerbalService } from './services/beyond-verbal/beyond-verbal.service';
@@ -25,7 +27,9 @@ import { IntroComponent } from './components/intro/intro.component';
   imports: [ 
     BrowserModule,
     HttpClientModule,
-    RoutingModule
+    RoutingModule,
+    FormsModule,
+    NgbModule.forRoot()
   ],
   providers: [ 
     BeyondVerbalService,
