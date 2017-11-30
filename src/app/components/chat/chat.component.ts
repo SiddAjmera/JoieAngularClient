@@ -10,6 +10,7 @@ import { IUserInfo } from '../../models/user-info';
 import { UserInfoService } from './../../services/user-info/user-info.service';
 import { WebempathService } from './../../services/webempath/webempath.service';
 import { IMessage } from '../../models/message';
+import { UtilsService } from '../../services/utils/utils.service';
 
 @Component({
   selector: 'app-chat',
@@ -31,7 +32,8 @@ export class ChatComponent implements OnInit {
     private userInfoService: UserInfoService,
     private suggestionsService: SuggestionsService,
     private messageService: MessageService,
-    private zone: NgZone
+    private zone: NgZone,
+    private utils: UtilsService
   ) { }
 
   ngOnInit() {
@@ -82,7 +84,7 @@ export class ChatComponent implements OnInit {
   }
 
   startRecognition() {
-    this.notification.play();
+    if(!this.utils.isMobile())this.notification.play();
     this.recognition.start();
     this.recognition.onresult = event => {
       this.queryDialogFlow(event.results[0][0].transcript);

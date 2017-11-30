@@ -16,6 +16,7 @@ import { TransformService } from './services/transform/transform.service';
 import { UserInfoService } from './services/user-info/user-info.service';
 import { WebempathService } from './services/webempath/webempath.service';
 import { IntroComponent } from './components/intro/intro.component';
+import { UtilsService } from './services/utils/utils.service';
 
 @NgModule({
   declarations: [
@@ -38,8 +39,8 @@ import { IntroComponent } from './components/intro/intro.component';
     SuggestionsService,
     TransformService,
     UserInfoService,
-    WebempathService
-    
+    WebempathService,
+    UtilsService
   ],
   bootstrap: [ AppComponent ]
 })
