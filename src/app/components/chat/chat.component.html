@@ -11,18 +11,20 @@
 <!--Card-->
 <div *ngIf="suggestions" class="v-scroll-row">
   <div class="card v-scroll-card" *ngFor="let video of suggestions">
+    <a [href]="video.videoUrl">
       <!--Card image-->
-      <img class="img-fluid" 
-          [src]="video.smallTN" 
+      <img class="card-img" 
+          [src]="video.mediumTN"
           [alt]="video.title">
       <!--Card content-->
       <div class="card-body">
         <!--Title-->
-        <h4 class="card-title">{{ video.title }}</h4>
+        <h6 class="card-title">{{ video.title | trimmer: 70 }}</h6>
         <!--Text-->
-        <p class="card-text">{{ video.description }}</p>
+        <p class="card-text">{{ video.description | trimmer: 150 }}</p>
         <!-- <a href="#" class="btn btn-primary">Button</a> -->
       </div>
+    </a>
   </div>
 </div>
 <!--/.Card-->

@@ -15,7 +15,7 @@ export class UtilsService {
     return youtubeResponseData.items.map((video) => {
       let videoInfo = video.snippet;
       return {
-        videoUrl: `https://www.youtube.com/watch?v=${video.id.videoId}`,
+        videoUrl: `${this.isMobile() ? 'vnd.youtube://' : 'https://'}www.youtube.com/watch?v=${video.id.videoId}`,
         title: videoInfo.title,
         description: videoInfo.description,
         smallTN: videoInfo.thumbnails.default.url,

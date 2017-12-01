@@ -17,13 +17,15 @@ import { UserInfoService } from './services/user-info/user-info.service';
 import { WebempathService } from './services/webempath/webempath.service';
 import { IntroComponent } from './components/intro/intro.component';
 import { UtilsService } from './services/utils/utils.service';
+import { TrimmerPipe } from './pipes/trimmer/trimmer.pipe';
 
 @NgModule({
   declarations: [
     AppComponent,
     ChatComponent,
     EmotionComponent,
-    IntroComponent
+    IntroComponent,
+    TrimmerPipe
   ],
   imports: [ 
     BrowserModule,
