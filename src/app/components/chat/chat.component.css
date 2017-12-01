@@ -2,9 +2,11 @@
   text-align: center;
 }
 .chat-box-container {
-  bottom: 15px;
+  bottom: 0;
   width: 100%;
-  position: absolute;
+  position: fixed;
+  background: white;
+  padding: 10px 0;
 }
 .chat-send-btn {
   padding: 6.1px;
@@ -53,9 +55,9 @@
 .v-scroll-row {
   overflow-x: auto;
   white-space: nowrap;
-  height: 32em;
+  height: 20em;
   overflow-y: hidden;
-  margin-left: 0.4rem;
+  margin: 0.1em 0.4rem 0 0.4rem;
 }
 .card-title {
   font-weight: bold;
@@ -73,4 +75,33 @@
 .card-body {
   padding: 0.6rem;
   white-space: normal;
+}
+.msg-list-container {
+  max-height: 43em;
+  overflow-y: scroll;
+}
+.list-group-item {
+  padding: 0;
+  border: none;
+}
+.msg {
+  max-width: 95%;
+  border-radius: 1em;
+  border: 1px solid gray;
+  padding: .4em .7em;
+  margin-bottom: 0.5em;
+  margin: .2em;
+  font-size: 14px;
+}
+.msg-time {
+  font-size: 10px;
+  display: block;
+}
+.msg-left {
+  float: left;
+  text-align: left;
+}
+.msg-right {
+  float: right;
+  text-align: right;
 }
