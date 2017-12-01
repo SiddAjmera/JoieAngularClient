@@ -17,9 +17,11 @@
     <div class="card v-scroll-card" *ngFor="let video of suggestions">
       <a [href]="video.videoUrl">
         <!--Card image-->
-        <img class="card-img" 
-            [src]="video.mediumTN"
-            [alt]="video.title">
+        <iframe class="card-img" 
+                [src]="video.embedUrl | sanitize"
+                frameborder="0" 
+                allowfullscreen>
+        </iframe>
         <!--Card content-->
         <div class="card-body">
           <!--Title-->
