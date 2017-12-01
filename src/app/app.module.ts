@@ -19,6 +19,7 @@ import { IntroComponent } from './components/intro/intro.component';
 import { UtilsService } from './services/utils/utils.service';
 import { TrimmerPipe } from './pipes/trimmer/trimmer.pipe';
 import { SanitizePipe } from './pipes/sanitize/sanitize.pipe';
+import { SpotifyService } from './services/spotify/spotify.service';
 
 @NgModule({
   declarations: [
@@ -44,7 +45,8 @@ import { SanitizePipe } from './pipes/sanitize/sanitize.pipe';
     TransformService,
     UserInfoService,
     WebempathService,
-    UtilsService
+    UtilsService,
+    SpotifyService
   ],
   bootstrap: [ AppComponent ]
 })

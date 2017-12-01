@@ -5,6 +5,7 @@ import 'rxjs/add/operator/map';
 import { environment } from './../../../environments/environment.prod';
 import { ISuggestion } from '../../models/suggestion';
 import { IUserInfo } from '../../models/user-info';
+import { SpotifyService } from './../spotify/spotify.service';
 import { UserInfoService } from '../user-info/user-info.service';
 import { UtilsService } from './../utils/utils.service';
 
@@ -17,6 +18,7 @@ export class SuggestionsService {
   constructor(
     private userInfoService: UserInfoService,
     private utilsService: UtilsService,
+    private spotifyService: SpotifyService,
     private http: HttpClient
   ) { }
 
@@ -44,6 +46,8 @@ export class SuggestionsService {
     Object.keys(this.userInfo).forEach((key) => {
       this.suggestActivityForFactor(key);
     }); */
+    this.spotifyService.getCategories();
+
     return this.http.get(`https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=25&q=meditation&type=videos&key=${environment.apiKeys.youtubeAPIKey}`)
       .map(response => this.utilsService.getRelevantYoutubeData(response));
   }
