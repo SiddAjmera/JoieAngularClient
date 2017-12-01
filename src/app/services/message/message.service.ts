@@ -6,8 +6,9 @@ import { IMessage } from './../../models/message';
 @Injectable()
 export class MessageService {
 
-  _messages: IMessage[] = [];
+  private _messages: IMessage[] = [];
   messagesUpdated: Subject<IMessage[]> = new Subject<IMessage[]>();
+  private _dialogEnded: boolean = false;
 
   constructor() { }
 
@@ -18,6 +19,14 @@ export class MessageService {
   addMessage(message: IMessage) {
     this._messages.push(message);
     this.messagesUpdated.next(this._messages);
+  }
+
+  setDialogEndStatus(dialogEnded) {
+    this._dialogEnded = dialogEnded;
+  }
+
+  getDialogEndStatus() {
+    return this._dialogEnded;
   }
 
 }

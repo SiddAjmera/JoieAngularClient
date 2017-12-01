@@ -22,7 +22,6 @@ export class ChatComponent implements OnInit {
   messages: IMessage[] = [];
   userInfo: IUserInfo;
   notification;
-  dialogEnded: boolean = false;
   textMessage: string = '';
   suggestions = [];
   constructor(
@@ -47,7 +46,7 @@ export class ChatComponent implements OnInit {
     this.messageService.messagesUpdated.subscribe(messages => {
       this.messages = messages;
     });
-    if(this.dialogEnded) {
+    if(this.messageService.getDialogEndStatus()) {
       this.suggestionsService.getSuggestionsForUser()
         .subscribe(videos => {
           this.suggestions = videos;
@@ -109,15 +108,15 @@ export class ChatComponent implements OnInit {
       }
       if(dialogFlowResponse['parameters'] && dialogFlowResponse['parameters']['permission'] === 'true') {
         dialogFlowResponse.fulfillment['speech'] = 'Great! I\'ll just click a snap of you, analyze your mood and then suggest you somethings!';
-        this.dialogEnded = true;
+        this.messageService.setDialogEndStatus(true);
       } else if(dialogFlowResponse['parameters'] && dialogFlowResponse['parameters']['permission'] === 'false') {
         dialogFlowResponse.fulfillment['speech'] = 'Okay. No issues! I\'ll analyze your mood with whatever I have and then suggest you somethings!';
-        this.dialogEnded = true;
+        this.messageService.setDialogEndStatus(true);
       }
       let botSaid = dialogFlowResponse.fulfillment['speech'];
       this.speakIt(botSaid);
       this.composeMessageObject(botSaid, 'BOT');
-      if(!this.dialogEnded) this.ref.detectChanges();
+      if(!this.messageService.getDialogEndStatus()) this.ref.detectChanges();
       console.log(this.messages);
     });
   }
@@ -126,7 +125,7 @@ export class ChatComponent implements OnInit {
     let msg = new SpeechSynthesisUtterance(botSaid);
     (<any>window).speechSynthesis.speak(msg);
     msg.onend = (event) => {
-      this.dialogEnded ? this.zone.run(() => this.router.navigate(['/emotion'])) : this.startRecognition();
+      this.messageService.getDialogEndStatus() ? this.zone.run(() => this.router.navigate(['/emotion'])) : this.startRecognition();
     }
   }
 
