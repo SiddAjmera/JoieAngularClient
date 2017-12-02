@@ -37,11 +37,11 @@ export class ChatComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.userInfo = this.userInfoService.getUserInfo();
+  //  this.userInfo = this.userInfoService.getUserInfo();
     this.recognition = new (<any>window).webkitSpeechRecognition();
     this.notification = new Audio('../../../assets/google_now_tone.mp3');
     // this.analyzeVoice();
-    this.suggestionsService.getSuggestionsForUser();
+   // this.suggestionsService.getSuggestionsForUser();
     this.messages = this.messageService.getMessages();
     this.messageService.messagesUpdated.subscribe(messages => {
       this.messages = messages;
@@ -103,8 +103,9 @@ export class ChatComponent implements OnInit {
     DialogFlowClient.textRequest(userMessage).then(response => {
       let dialogFlowResponse = response.result;
       if(dialogFlowResponse.action === 'get.user.info') {
-        this.userInfo = dialogFlowResponse['parameters'];
-        console.log(this.userInfo);
+        const userInfo = dialogFlowResponse['parameters'];
+        this.userInfoService.setUserInfo(userInfo);
+        console.log(userInfo);
       }
       if(dialogFlowResponse['parameters'] && dialogFlowResponse['parameters']['permission'] === 'true') {
         dialogFlowResponse.fulfillment['speech'] = 'Great! I\'ll just click a snap of you, analyze your mood and then suggest you somethings!';

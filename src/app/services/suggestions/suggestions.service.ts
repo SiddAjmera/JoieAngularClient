@@ -8,6 +8,7 @@ import { IUserInfo } from '../../models/user-info';
 import { SpotifyService } from './../spotify/spotify.service';
 import { UserInfoService } from '../user-info/user-info.service';
 import { UtilsService } from './../utils/utils.service';
+import { user_intent_scrore } from '../../app.constants';
 
 @Injectable()
 export class SuggestionsService {
@@ -42,6 +43,10 @@ export class SuggestionsService {
    */
 
   getSuggestionsForUser() {
+    this.userInfo = this.userInfoService.getUserInfo();
+    console.log('this.userInfo', this.userInfo);
+    const score = this.computeScore();
+    this.suggestActivityForFactor(score);
     /* this.userInfo = this.userInfoService.getUserInfo();
     Object.keys(this.userInfo).forEach((key) => {
       this.suggestActivityForFactor(key);
@@ -52,16 +57,36 @@ export class SuggestionsService {
       .map(response => this.utilsService.getRelevantYoutubeData(response));
   }
 
-  suggestActivityForFactor(factor) {
-    switch(factor) {
-      case 'FOOD': //suggest something related to food
-      case 'FRIEND': //suggest something related to friend
-      case 'WORKOUT': //suggest something related to workout
-      case 'SLEEP': //suggest something related to sleep
-      case 'DRINKS': //suggest something related to drinks
-      case 'EMOTION': //suggest something related to emotions
-      case 'DAY': //suggest something related to day
+  computeScore() {
+    let score = 0;
+    Object.keys(this.userInfo).forEach((val) => {
+      score = score + user_intent_scrore[val][this.userInfo[val]];
+    });
+    return score;
+  }
+
+  suggestActivityForFactor(score) {
+    const factor = {};
+    switch( true ) {
+      case ( score >= 25 ):
+      factor['mood'] = 'Super Happy';
+      factor['keywords'] = 'Happiness Meditation: Endorphin Release Music for Happiness and Positive Thinking, Sonicaid - Music for the Mind, Happiness, Powerful Meditation Music for Happiness & Joy | Relax Your Mind';
+      break;
+      case ( score > 15 && score < 25):
+      factor['mood'] = 'Active';
+      factor['keywords'] = 'Light Fitness Songs: Sounds of Nature & Piano Background Music, Background Music For Cooking';
+      break;
+      case ( score >= 5 && score < 15):
+      factor['mood'] = 'General Meditation';
+      factor['keywords'] = 'Music for stress, Anxiety, relaxation, depression | isochronic tones';
+      break;
+      case ( score < 5 ):
+      factor['mood'] = 'Sad';
+      factor['keywords'] = 'Overcome sadness, Healing Binaural Rain';
+      break;
+      // case for sleep
     }
+    return factor;
   }
 
 }
