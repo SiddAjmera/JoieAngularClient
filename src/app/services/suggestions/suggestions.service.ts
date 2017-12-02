@@ -51,7 +51,7 @@ export class SuggestionsService {
     Object.keys(this.userInfo).forEach((key) => {
       this.suggestActivityForFactor(key);
     }); */
-    this.spotifyService.getCategories();
+    this.spotifyService.getSuggestedTracks();
 
     return this.http.get(`https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=25&q=meditation&type=videos&key=${environment.apiKeys.youtubeAPIKey}`)
       .map(response => this.utilsService.getRelevantYoutubeData(response));

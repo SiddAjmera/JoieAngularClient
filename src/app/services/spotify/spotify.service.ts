@@ -6,18 +6,15 @@ import { environment } from './../../../environments/environment.prod';
 @Injectable()
 export class SpotifyService {
 
-  apiBase: string = 'https://accounts.spotify.com/api/token';
-
   constructor(private _httpClient: HttpClient) { }
 
   getAuthToken() {
-    let headers = new HttpHeaders();
-    headers = headers.set('Authorization', `Basic ${btoa(environment.apiKeys.spotifyClientId + ':' + environment.apiKeys.spotifyClientSecret)}`);
-    headers = headers.set('Content-Type', 'application/x-www-form-urlencoded');
-
-    let body = 'grant_type=client_credentials';
-    
-    return this._httpClient.post(this.apiBase, body, { headers }).map(response => response['access_token']);
+    let url = 'http://localhost:3000/auth';
+    let body = {
+      clientId: environment.apiKeys.spotifyClientId,
+      clientSecret: environment.apiKeys.spotifyClientSecret
+    };
+    return this._httpClient.post(url, body).map(response => response['access_token']);
   }
 
   getCategories() {
@@ -27,6 +24,31 @@ export class SpotifyService {
       headers = headers.set('Authorization', `Bearer ${accessToken}`);
       this._httpClient.get(url, { headers }).map(response => {
         console.log(response);
+      });
+    });
+  }
+
+  getSuggestedTracks() {
+    this.getAuthToken().subscribe(accessToken => {
+      let url = 'https://api.spotify.com/v1/search?type=album,artist,playlist,track&q=Mood Booster';
+      let headers = new HttpHeaders();
+      headers = headers.set('Authorization', `Bearer ${accessToken}`);
+      this._httpClient.get(url, { headers })
+        .subscribe(response => {
+          console.log(response);
+          let modifiedTracks = response['tracks']['items'].map(track => {
+            let thumbnailsArray = track.album.images.map(image => image.url);
+            return {
+              name: track.name,
+              preview: track.preview_url,
+              deepLink: track.uri,
+              externalUrl: track.external_urls.spotify,
+              largeTN: thumbnailsArray[0],
+              mediumTN: thumbnailsArray[1],
+              smallTN: thumbnailsArray[2]
+            }
+          });
+        return modifiedTracks;
       });
     });
   }
