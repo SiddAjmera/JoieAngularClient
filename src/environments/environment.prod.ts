@@ -7,6 +7,8 @@ export const environment = {
     'beyondVerbal': 'your-api-key-here',
     'youtubeAPIKey': 'your-api-key-here',
     'youtubeClientId': 'your-api-key-here',
-    'youtubeClientSecret': 'your-api-key-here'
+    'youtubeClientSecret': 'your-api-key-here',
+    'spotifyClientId': 'your-api-key-here',
+    'spotifyClientSecret': 'your-api-key-here'
   }
 };
