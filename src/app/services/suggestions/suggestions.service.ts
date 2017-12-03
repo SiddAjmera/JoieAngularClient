@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import 'rxjs/add/operator/map';
+import 'rxjs/add/observable/forkJoin';
 
 import { environment } from './../../../environments/environment.prod';
 import { ISuggestion } from '../../models/suggestion';
@@ -9,6 +10,7 @@ import { SpotifyService } from './../spotify/spotify.service';
 import { UserInfoService } from '../user-info/user-info.service';
 import { UtilsService } from './../utils/utils.service';
 import { user_intent_scrore } from '../../app.constants';
+import { Observable } from 'rxjs/Observable';
 
 @Injectable()
 export class SuggestionsService {
@@ -45,16 +47,17 @@ export class SuggestionsService {
   getSuggestionsForUser() {
     this.userInfo = this.userInfoService.getUserInfo();
     console.log('this.userInfo', this.userInfo);
-    const score = this.computeScore();
-    this.suggestActivityForFactor(score);
-    /* this.userInfo = this.userInfoService.getUserInfo();
-    Object.keys(this.userInfo).forEach((key) => {
-      this.suggestActivityForFactor(key);
-    }); */
-    this.spotifyService.getSuggestedTracks();
-
-    return this.http.get(`https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=25&q=meditation&type=videos&key=${environment.apiKeys.youtubeAPIKey}`)
-      .map(response => this.utilsService.getRelevantYoutubeData(response));
+    let score = this.computeScore();
+    let activities = this.suggestActivityForFactor(score);
+    let youtubeData =  this.http.get(`https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=5&q=${activities['keywords']}&type=videos&key=${environment.apiKeys.youtubeAPIKey}`)
+                           .map(response => this.utilsService.getRelevantYoutubeData(response));
+    return this.spotifyService.getAuthToken().map((authToken) => {
+      let spotifyData = this.spotifyService.getSuggestedTracks(authToken, activities['keywords']);
+      /* .subscribe((tracks) => {
+        console.log('Got the tracks as : ', tracks);
+      }); */
+      return Observable.forkJoin(youtubeData, spotifyData);
+    });
   }
 
   computeScore() {
@@ -70,7 +73,7 @@ export class SuggestionsService {
     switch( true ) {
       case ( score >= 25 ):
       factor['mood'] = 'Super Happy';
-      factor['keywords'] = 'Happiness Meditation: Endorphin Release Music for Happiness and Positive Thinking, Sonicaid - Music for the Mind, Happiness, Powerful Meditation Music for Happiness & Joy | Relax Your Mind';
+      factor['keywords'] = 'Happiness, Meditation';
       break;
       case ( score > 15 && score < 25):
       factor['mood'] = 'Active';
@@ -78,7 +81,7 @@ export class SuggestionsService {
       break;
       case ( score >= 5 && score < 15):
       factor['mood'] = 'General Meditation';
-      factor['keywords'] = 'Music for stress, Anxiety, relaxation, depression | isochronic tones';
+      factor['keywords'] = 'Music for stress, Anxiety, relaxation, depression, isochronic tones';
       break;
       case ( score < 5 ):
       factor['mood'] = 'Sad';

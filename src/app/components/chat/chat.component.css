@@ -105,3 +105,11 @@
   float: right;
   text-align: right;
 }
+.spotify {
+  position: absolute;
+  margin-top: -220px;
+}
+
+.spotify-audio {
+  display: block;
+}

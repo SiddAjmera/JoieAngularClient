@@ -49,7 +49,9 @@ export class ChatComponent implements OnInit {
     if(this.messageService.getDialogEndStatus()) {
       this.suggestionsService.getSuggestionsForUser()
         .subscribe(videos => {
-          this.suggestions = videos;
+          videos.subscribe(suggestions => {
+            this.suggestions = this.utils.shuffleSuggestions(suggestions[0].concat(suggestions[1]));
+          });
         });
     }
   }
@@ -105,7 +107,6 @@ export class ChatComponent implements OnInit {
       if(dialogFlowResponse.action === 'get.user.info') {
         const userInfo = dialogFlowResponse['parameters'];
         this.userInfoService.setUserInfo(userInfo);
-        console.log(userInfo);
       }
       if(dialogFlowResponse['parameters'] && dialogFlowResponse['parameters']['permission'] === 'true') {
         dialogFlowResponse.fulfillment['speech'] = 'Great! I\'ll just click a snap of you, analyze your mood and then suggest you somethings!';
@@ -118,7 +119,6 @@ export class ChatComponent implements OnInit {
       this.speakIt(botSaid);
       this.composeMessageObject(botSaid, 'BOT');
       if(!this.messageService.getDialogEndStatus()) this.ref.detectChanges();
-      console.log(this.messages);
     });
   }
 

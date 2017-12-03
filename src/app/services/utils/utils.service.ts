@@ -16,6 +16,7 @@ export class UtilsService {
       let videoInfo = video.snippet;
       return {
         // videoUrl: `${this.isMobile() ? 'vnd.youtube://' : 'https://'}www.youtube.com/watch?v=${video.id.videoId}`,
+        source: 'YOUTUBE',
         videoUrl: `https://www.youtube.com/watch?v=${video.id.videoId}`,
         embedUrl: `https://www.youtube.com/embed/${video.id.videoId}`,
         title: videoInfo.title,
@@ -25,6 +26,25 @@ export class UtilsService {
         largeTN: videoInfo.thumbnails.high.url
       }
     });
+  }
+
+  shuffleSuggestions(array) {
+    var currentIndex = array.length, temporaryValue, randomIndex;
+  
+    // While there remain elements to shuffle...
+    while (0 !== currentIndex) {
+  
+      // Pick a remaining element...
+      randomIndex = Math.floor(Math.random() * currentIndex);
+      currentIndex -= 1;
+  
+      // And swap it with the current element.
+      temporaryValue = array[currentIndex];
+      array[currentIndex] = array[randomIndex];
+      array[randomIndex] = temporaryValue;
+    }
+  
+    return array;
   }
 
 }
