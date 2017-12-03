@@ -47,7 +47,7 @@
   </div>
   <!--/.Card-->
 </div>
-<div class="chat-box-container">
+<div class="chat-box-container" *ngIf="!messageService.getDialogEndStatus()">
   <input type="text" 
          class="msg-text-box" 
          placeholder="Don't be shy! Break the ice!" 

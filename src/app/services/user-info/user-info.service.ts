@@ -5,7 +5,7 @@ import { IUserInfo } from '../../models/user-info';
 @Injectable()
 export class UserInfoService {
 
-  private _userInfo: IUserInfo;
+  private _userInfo: IUserInfo = {};
 
   constructor() { }
 

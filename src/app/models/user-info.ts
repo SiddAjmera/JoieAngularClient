@@ -23,4 +23,6 @@ export interface IUserInfo {
     drinks?: boolean;
     emotion?: string;
     food?: boolean;
+    primaryEmotion?: string;
+    secondaryEmotion?: string;
 };

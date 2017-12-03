@@ -6,6 +6,7 @@ import 'rxjs/add/observable/forkJoin';
 import { environment } from './../../../environments/environment.prod';
 import { ISuggestion } from '../../models/suggestion';
 import { IUserInfo } from '../../models/user-info';
+import { MessageService } from './../message/message.service';
 import { SpotifyService } from './../spotify/spotify.service';
 import { UserInfoService } from '../user-info/user-info.service';
 import { UtilsService } from './../utils/utils.service';
@@ -22,7 +23,8 @@ export class SuggestionsService {
     private userInfoService: UserInfoService,
     private utilsService: UtilsService,
     private spotifyService: SpotifyService,
-    private http: HttpClient
+    private http: HttpClient,
+    private _messageService: MessageService
   ) { }
 
   /**
@@ -49,6 +51,13 @@ export class SuggestionsService {
     console.log('this.userInfo', this.userInfo);
     let score = this.computeScore();
     let activities = this.suggestActivityForFactor(score);
+
+    this._messageService.addMessage({
+      sender: 'BOT',
+      message: `Based on my analysis on your response, your mood is ${activities['mood']}. Following are my suggestions for you:`,
+      time: new Date().toString()
+    });
+
     let youtubeData =  this.http.get(`https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=5&q=${activities['keywords']}&type=videos&key=${environment.apiKeys.youtubeAPIKey}`)
                            .map(response => this.utilsService.getRelevantYoutubeData(response));
     return this.spotifyService.getAuthToken().map((authToken) => {

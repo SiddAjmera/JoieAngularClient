@@ -4,7 +4,9 @@ import 'tracking/build/tracking';
 import 'tracking/build/data/face';
 
 import { EmotionService } from './../../services/emotion/emotion.service';
+import { IUserInfo } from './../../models/user-info';
 import { MessageService } from '../../services/message/message.service';
+import { UserInfoService } from './../../services/user-info/user-info.service';
 
 declare var window: any;
 declare var tracking: any;
@@ -24,7 +26,8 @@ export class EmotionComponent implements OnInit, AfterViewInit {
     private route: ActivatedRoute, 
     private messageService: MessageService,
     private router: Router,
-    private zone: NgZone
+    private zone: NgZone,
+    private _userInfoService: UserInfoService
   ) { }
 
   ngOnInit() {
@@ -67,13 +70,12 @@ export class EmotionComponent implements OnInit, AfterViewInit {
         emotionValues.splice(originalEmotionValues.indexOf(maximum), 1); // remove max from the array
         let secondMax = Math.max.apply(null, emotionValues); // get the 2nd max
         this.userSecondaryEmotion = emotionsArray[originalEmotionValues.indexOf(secondMax)];
+        let userInfo: IUserInfo = this._userInfoService.getUserInfo();
+        userInfo.primaryEmotion = this.userPrimaryEmotion;
+        userInfo.secondaryEmotion = this.userSecondaryEmotion;
+        this._userInfoService.setUserInfo(userInfo);
         // this.zone.run(() => this.router.navigate(['/chat']));
         this.router.navigate(['/chat']);
-        this.messageService.addMessage({
-          time: new Date().toString(),
-          sender: 'BOT',
-          message: `Your primary emotion is ${this.userPrimaryEmotion} and your secondary emotion is ${this.userSecondaryEmotion}`
-        });
       } else {
         this.ngOnInit();
       }
