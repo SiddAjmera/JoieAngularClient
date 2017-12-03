@@ -24,6 +24,7 @@ export class ChatComponent implements OnInit {
   notification;
   textMessage: string = '';
   suggestions = [];
+  dialogEndStatus = false;
   constructor(
     private ref: ChangeDetectorRef, 
     private webEmpath: WebempathService, 
@@ -49,6 +50,8 @@ export class ChatComponent implements OnInit {
     if(this.messageService.getDialogEndStatus()) {
       this.suggestionsService.getSuggestionsForUser()
         .subscribe(videos => {
+          // setting end status to hide chat box;
+          this.dialogEndStatus = true;
           videos.subscribe(suggestions => {
             this.suggestions = this.utils.shuffleSuggestions(suggestions[0].concat(suggestions[1]));
           });
