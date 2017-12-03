@@ -15,7 +15,7 @@ export class IntroComponent {
       description: 'Your very own mindfulness and mental wellbeing instructor.'
     },
     {
-      imageUrl: 'https://mdbootstrap.com/img/Photos/Slides/img%20(129).jpg',
+      imageUrl: 'https://mdbootstrap.com/img/Photos/Slides/img%20(1).jpg',
       title: 'I\'m smart',
       description: 'I analyze your mood and suggest you activities to make you feel better.'
     },
