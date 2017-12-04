@@ -17,30 +17,34 @@
     <div class="card v-scroll-card" *ngFor="let suggestion of suggestions">
       <a *ngIf="suggestion.source === 'YOUTUBE'">
         <!--Card image-->
-        <iframe class="card-img" 
-                [src]="suggestion.embedUrl | sanitize"
-                frameborder="0" 
-                allowfullscreen>
-        </iframe>
+        <div class="width-100">
+          <iframe class="card-img"
+                  [src]="suggestion.embedUrl | sanitize"
+                  frameborder="0" 
+                  allowfullscreen>
+          </iframe>
+        </div>
         <!--Card content-->
         <div class="card-body">
           <!--Title-->
-          <h6 class="card-title">{{ suggestion.title | trimmer: 70 }}</h6>
+          <h6 class="card-title">{{ suggestion.title | trimmer: 60 }}</h6>
           <!--Text-->
-          <p class="card-text">{{ suggestion.description | trimmer: 150 }}</p>
+          <p class="card-text">{{ suggestion.description | trimmer: 100 }}</p>
           <!-- <a href="#" class="btn btn-primary">Button</a> -->
         </div>
       </a>
       <a *ngIf="suggestion.source === 'SPOTIFY'"
          class="spotify">
-        <img class="card-img" 
-             [src]="suggestion.mediumTN | sanitize"
-             [alt]="suggestion.title" />
-        <audio controls class="spotify-audio">
-          <source [src]="suggestion.preview | sanitize" type="audio/mpeg">
-        </audio>
-        <div class="card-body">
-          <h6 class="card-title">{{ suggestion.title | trimmer: 70 }}</h6>
+        <div class="width-100"> 
+          <img class="card-img" 
+              [src]="suggestion.mediumTN | sanitize"
+              [alt]="suggestion.title" />
+        </div>
+        <div class="card-body">    
+          <h6 class="card-title">{{ suggestion.title | trimmer: 60 }}</h6>
+          <audio controls class="spotify-audio card-text">
+            <source [src]="suggestion.preview | sanitize" type="audio/mpeg">
+          </audio>
         </div>
       </a>
     </div>
