@@ -13,6 +13,26 @@ export const user_intent_scrore = {
         sad: -10,
         neutral: 1
     },
+    primaryEmotion: {
+        anger: -10,
+        contempt: -8,
+        disgust: -6,
+        fear: -4,
+        happiness: 3,
+        neutral: 1,
+        sadness: -10,
+        surprise: 2
+    },
+    secondaryEmotion: {
+        anger: -10,
+        contempt: -8,
+        disgust: -6,
+        fear: -4,
+        happiness: 3,
+        neutral: 1,
+        sadness: -10,
+        surprise: 2
+    },
     food: {
         true: 2,
         false: -2
