@@ -72,7 +72,9 @@ export class SuggestionsService {
   computeScore() {
     let score = 0;
     Object.keys(this.userInfo).forEach((val) => {
-      score = score + user_intent_scrore[val][this.userInfo[val]];
+      if(user_intent_scrore[val]) {
+        score = score + user_intent_scrore[val][this.userInfo[val]];
+      }
     });
     return score;
   }
