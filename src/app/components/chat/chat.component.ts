@@ -25,6 +25,7 @@ export class ChatComponent implements OnInit {
   textMessage: string = '';
   suggestions = [];
   dialogEndStatus = false;
+  userDenied: boolean;
   constructor(
     private ref: ChangeDetectorRef, 
     private webEmpath: WebempathService, 
@@ -117,6 +118,7 @@ export class ChatComponent implements OnInit {
       } else if(dialogFlowResponse['parameters'] && dialogFlowResponse['parameters']['permission'] === 'false') {
         dialogFlowResponse.fulfillment['speech'] = 'Okay. No issues! I\'ll analyze your mood with whatever I have and then suggest you somethings!';
         this.messageService.setDialogEndStatus(true);
+        this.userDenied = true;
       }
       let botSaid = dialogFlowResponse.fulfillment['speech'];
       this.speakIt(botSaid);
@@ -129,7 +131,19 @@ export class ChatComponent implements OnInit {
     let msg = new SpeechSynthesisUtterance(botSaid);
     (<any>window).speechSynthesis.speak(msg);
     msg.onend = (event) => {
-      this.messageService.getDialogEndStatus() ? this.zone.run(() => this.router.navigate(['/emotion'])) : this.startRecognition();
+      if(this.messageService.getDialogEndStatus()) {
+        if(!this.userDenied) this.zone.run(() => this.router.navigate(['/emotion']));
+        else {
+          this.suggestionsService.getSuggestionsForUser()
+            .subscribe(videos => {
+              // setting end status to hide chat box;
+              this.dialogEndStatus = true;
+              videos.subscribe(suggestions => {
+                this.suggestions = this.utils.shuffleSuggestions(suggestions[0].concat(suggestions[1]));
+              });
+            });
+        }
+      } else this.startRecognition();
     }
   }
 
