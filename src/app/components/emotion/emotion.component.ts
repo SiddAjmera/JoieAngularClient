@@ -75,7 +75,7 @@ export class EmotionComponent implements OnInit, AfterViewInit {
         userInfo.secondaryEmotion = this.userSecondaryEmotion;
         this._userInfoService.setUserInfo(userInfo);
         // this.zone.run(() => this.router.navigate(['/chat']));
-        this.router.navigate(['/chat']);
+        // this.router.navigate(['/chat']);
       } else {
         this.ngOnInit();
       }

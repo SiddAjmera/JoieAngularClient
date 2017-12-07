@@ -20,6 +20,7 @@ import { UtilsService } from './services/utils/utils.service';
 import { TrimmerPipe } from './pipes/trimmer/trimmer.pipe';
 import { SanitizePipe } from './pipes/sanitize/sanitize.pipe';
 import { SpotifyService } from './services/spotify/spotify.service';
+import { ScrollBottomDirective } from './directives/scroll-bottom/scroll-bottom.directive';
 
 @NgModule({
   declarations: [
@@ -28,7 +29,8 @@ import { SpotifyService } from './services/spotify/spotify.service';
     EmotionComponent,
     IntroComponent,
     TrimmerPipe,
-    SanitizePipe
+    SanitizePipe,
+    ScrollBottomDirective
   ],
   imports: [ 
     BrowserModule,

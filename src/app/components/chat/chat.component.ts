@@ -1,5 +1,5 @@
 import { SuggestionsService } from './../../services/suggestions/suggestions.service';
-import { Component, OnInit, ChangeDetectorRef, NgZone } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef, NgZone, ViewChild, ElementRef } from '@angular/core';
 import { Router } from '@angular/router';
 
 import { BeyondVerbalService } from '../../services/beyond-verbal/beyond-verbal.service';
@@ -26,6 +26,7 @@ export class ChatComponent implements OnInit {
   suggestions = [];
   dialogEndStatus = false;
   userDenied: boolean;
+  @ViewChild('scrollMe') private myScrollContainer: ElementRef;
   constructor(
     private ref: ChangeDetectorRef, 
     private webEmpath: WebempathService, 
@@ -55,6 +56,7 @@ export class ChatComponent implements OnInit {
           this.dialogEndStatus = true;
           videos.subscribe(suggestions => {
             this.suggestions = this.utils.shuffleSuggestions(suggestions[0].concat(suggestions[1]));
+            this.scrollToBottom();
           });
         });
     }
@@ -93,6 +95,12 @@ export class ChatComponent implements OnInit {
         }
       };
     });
+  }
+
+  scrollToBottom(): void {
+    try {
+        this.myScrollContainer.nativeElement.scrollTop = this.myScrollContainer.nativeElement.scrollHeight;
+    } catch(err) { }                 
   }
 
   startRecognition() {
@@ -154,5 +162,6 @@ export class ChatComponent implements OnInit {
       sender: sender
     });
     this.ref.detectChanges();
+    this.scrollToBottom();
   }
 }

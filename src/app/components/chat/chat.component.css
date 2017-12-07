@@ -1,5 +1,6 @@
 .title {
   text-align: center;
+  font-weight: bold;  
 }
 .chat-box-container {
   bottom: 0;
@@ -33,24 +34,24 @@
     width: 80%
   }
 }
-@media only screen and (min-width:375px ) and (max-width: 424px) {
+@media only screen and (min-width:375px ) and (max-width: 425px) {
   .msg-text-box {
-    width: 82%
+    width: 82.5%
   }
 }
-@media only screen and (min-width:425px ) and (max-width: 556px) {
+@media only screen and (min-width:426px ) and (max-width: 556px) {
   .msg-text-box {
-    width: 84%
+    width: 84.5%
   }
 }
 @media only screen and (min-width:557px ) and (max-width: 736px) {
   .msg-text-box {
-    width: 86%
+    width: 86.5%
   }
 }
 @media only screen and (min-width:737px ) and (max-width: 768px) {
   .msg-text-box {
-    width: 91%
+    width: 91.5%
   }
 }
 @media only screen and (min-width:769px ) and (max-width: 1024px) {
