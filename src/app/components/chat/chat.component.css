@@ -31,47 +31,47 @@
 }
 @media only screen and (min-width:320px ) and (max-width: 374px) {
   .msg-text-box {
-    width: 80%
+    width: 78%
   }
 }
 @media only screen and (min-width:375px ) and (max-width: 425px) {
   .msg-text-box {
-    width: 82.5%
+    width: 81%
   }
 }
 @media only screen and (min-width:426px ) and (max-width: 556px) {
   .msg-text-box {
-    width: 84.5%
+    width: 84%
   }
 }
 @media only screen and (min-width:557px ) and (max-width: 736px) {
   .msg-text-box {
-    width: 86.5%
+    width: 86%
   }
 }
 @media only screen and (min-width:737px ) and (max-width: 768px) {
   .msg-text-box {
-    width: 91.5%
+    width: 91%
   }
 }
 @media only screen and (min-width:769px ) and (max-width: 1024px) {
   .msg-text-box {
-    width: 93.5%
+    width: 93%
   }
 }
 @media only screen and (min-width:1025px ) and (max-width: 1440px) {
   .msg-text-box {
-    width: 95.5%
+    width: 95%
   }
 }
 @media only screen and (min-width:1441px ) {
   .msg-text-box {
-    width: 97.5%
+    width: 97%
   }
 }
 .v-scroll-card {
   display: inline-flex ;
-  width: 60%;
+  width: 40%; /* Changed from 60% to 40% to accommodate all the cards and make their size uniform*/
   margin-right: 0.4rem;
 }
 .card-img {
