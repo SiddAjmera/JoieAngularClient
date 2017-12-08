@@ -15,6 +15,7 @@ import { SuggestionsService } from './services/suggestions/suggestions.service';
 import { TransformService } from './services/transform/transform.service';
 import { UserInfoService } from './services/user-info/user-info.service';
 import { WebempathService } from './services/webempath/webempath.service';
+import { WindowService } from './services/window/window.service';
 import { IntroComponent } from './components/intro/intro.component';
 import { UtilsService } from './services/utils/utils.service';
 import { TrimmerPipe } from './pipes/trimmer/trimmer.pipe';
@@ -48,7 +49,8 @@ import { ScrollBottomDirective } from './directives/scroll-bottom/scroll-bottom.
     UserInfoService,
     WebempathService,
     UtilsService,
-    SpotifyService
+    SpotifyService,
+    WindowService
   ],
   bootstrap: [ AppComponent ]
 })
