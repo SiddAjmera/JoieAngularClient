@@ -59,14 +59,9 @@
     width: 93%
   }
 }
-@media only screen and (min-width:1025px ) and (max-width: 1440px) {
+@media only screen and (min-width:1025px ) {
   .msg-text-box {
     width: 95%
-  }
-}
-@media only screen and (min-width:1441px ) {
-  .msg-text-box {
-    width: 97%
   }
 }
 .v-scroll-card {
