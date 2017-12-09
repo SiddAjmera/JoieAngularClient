@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { NgModule } from '@angular/core';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
+import { AudioUtilService } from './services/audio-util/audio-util.service';
 import { AppComponent } from './app.component';
 import { BeyondVerbalService } from './services/beyond-verbal/beyond-verbal.service';
 import { ChatComponent } from './components/chat/chat.component';
@@ -22,6 +23,7 @@ import { TrimmerPipe } from './pipes/trimmer/trimmer.pipe';
 import { SanitizePipe } from './pipes/sanitize/sanitize.pipe';
 import { SpotifyService } from './services/spotify/spotify.service';
 import { ScrollBottomDirective } from './directives/scroll-bottom/scroll-bottom.directive';
+import { RecorderService } from './services/recorder/recorder.service';
 
 @NgModule({
   declarations: [
@@ -50,7 +52,9 @@ import { ScrollBottomDirective } from './directives/scroll-bottom/scroll-bottom.
     WebempathService,
     UtilsService,
     SpotifyService,
-    WindowService
+    WindowService,
+    AudioUtilService,
+    RecorderService
   ],
   bootstrap: [ AppComponent ]
 })
