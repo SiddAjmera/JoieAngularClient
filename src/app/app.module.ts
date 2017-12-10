@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { NgModule } from '@angular/core';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
+import { AudioUtilService } from './services/audio-util/audio-util.service';
 import { AppComponent } from './app.component';
 import { BeyondVerbalService } from './services/beyond-verbal/beyond-verbal.service';
 import { ChatComponent } from './components/chat/chat.component';
@@ -15,11 +16,14 @@ import { SuggestionsService } from './services/suggestions/suggestions.service';
 import { TransformService } from './services/transform/transform.service';
 import { UserInfoService } from './services/user-info/user-info.service';
 import { WebempathService } from './services/webempath/webempath.service';
+import { WindowService } from './services/window/window.service';
 import { IntroComponent } from './components/intro/intro.component';
 import { UtilsService } from './services/utils/utils.service';
 import { TrimmerPipe } from './pipes/trimmer/trimmer.pipe';
 import { SanitizePipe } from './pipes/sanitize/sanitize.pipe';
 import { SpotifyService } from './services/spotify/spotify.service';
+import { ScrollBottomDirective } from './directives/scroll-bottom/scroll-bottom.directive';
+import { RecorderService } from './services/recorder/recorder.service';
 
 @NgModule({
   declarations: [
@@ -28,7 +32,8 @@ import { SpotifyService } from './services/spotify/spotify.service';
     EmotionComponent,
     IntroComponent,
     TrimmerPipe,
-    SanitizePipe
+    SanitizePipe,
+    ScrollBottomDirective
   ],
   imports: [ 
     BrowserModule,
@@ -46,7 +51,10 @@ import { SpotifyService } from './services/spotify/spotify.service';
     UserInfoService,
     WebempathService,
     UtilsService,
-    SpotifyService
+    SpotifyService,
+    WindowService,
+    AudioUtilService,
+    RecorderService
   ],
   bootstrap: [ AppComponent ]
 })

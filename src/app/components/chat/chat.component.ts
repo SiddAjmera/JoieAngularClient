@@ -1,7 +1,7 @@
-import { SuggestionsService } from './../../services/suggestions/suggestions.service';
-import { Component, OnInit, ChangeDetectorRef, NgZone } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef, NgZone, ViewChild, ElementRef } from '@angular/core';
 import { Router } from '@angular/router';
 
+import { AudioUtilService } from './../../services/audio-util/audio-util.service';
 import { BeyondVerbalService } from '../../services/beyond-verbal/beyond-verbal.service';
 import { DialogFlowClient } from '../../dialog-flow/dialog-flow.client';
 import { environment } from './../../../environments/environment.prod';
@@ -11,6 +11,9 @@ import { UserInfoService } from './../../services/user-info/user-info.service';
 import { WebempathService } from './../../services/webempath/webempath.service';
 import { IMessage } from '../../models/message';
 import { UtilsService } from '../../services/utils/utils.service';
+import { WindowService } from './../../services/window/window.service';
+import { SuggestionsService } from './../../services/suggestions/suggestions.service';
+import { RecorderService } from './../../services/recorder/recorder.service';
 
 @Component({
   selector: 'app-chat',
@@ -26,6 +29,8 @@ export class ChatComponent implements OnInit {
   suggestions = [];
   dialogEndStatus = false;
   userDenied: boolean;
+  window; navigator; audioContext; analyser; audioSupport; localStream; getUserMedia; node;
+  @ViewChild('scrollMe') private myScrollContainer: ElementRef;
   constructor(
     private ref: ChangeDetectorRef, 
     private webEmpath: WebempathService, 
@@ -35,14 +40,24 @@ export class ChatComponent implements OnInit {
     private suggestionsService: SuggestionsService,
     private messageService: MessageService,
     private zone: NgZone,
-    private utils: UtilsService
-  ) { }
+    private utils: UtilsService,
+    private _window: WindowService,
+    private _audioUtil: AudioUtilService,
+    private _recorderService: RecorderService
+  ) { 
+    this.window = this._window.nativeWindow;
+    this.navigator = this._window.nativeNavigator;
+  }
 
   ngOnInit() {
   //  this.userInfo = this.userInfoService.getUserInfo();
-    this.recognition = new (<any>window).webkitSpeechRecognition();
+    this.recognition = new this.window.webkitSpeechRecognition();
+    this.window.AudioContext = this.window.AudioContext || this.window.webkitAudioContext;
+    this.navigator.getUserMedia = this.navigator.getUserMedia || this.navigator.webkitGetUserMedia || this.navigator.mozGetUserMedia || this.navigator.msGetUserMedia;
+    this.audioContext = new AudioContext;
+    this.analyser = this.audioContext.createAnalyser();
     this.notification = new Audio('../../../assets/google_now_tone.mp3');
-    // this.analyzeVoice();
+    this._recorderService.init.call(this);
    // this.suggestionsService.getSuggestionsForUser();
     this.messages = this.messageService.getMessages();
     this.messageService.messagesUpdated.subscribe(messages => {
@@ -55,50 +70,60 @@ export class ChatComponent implements OnInit {
           this.dialogEndStatus = true;
           videos.subscribe(suggestions => {
             this.suggestions = this.utils.shuffleSuggestions(suggestions[0].concat(suggestions[1]));
+            this.scrollToBottom();
           });
         });
     }
   }
 
   analyzeVoice() {
-    navigator.mediaDevices.getUserMedia({ audio: true }).then(stream => {
-      console.log('Got media stream as : ', stream);
-      // store streaming data chunks in array
-      const chunks = [];
-      // create media recorder instance to initialize recording
-      this.recorder = new (<any>window).MediaRecorder(stream, {
-        audioBitsPerSecond: 176000
-      });
-      // function to be called when data is received
-      this.recorder.ondataavailable = e => {
-        // add stream data to chunks
-        chunks.push(e.data);
-        // if recorder is 'inactive' then recording has finished
-        if (this.recorder.state == 'inactive') {
-          // convert stream data chunks to a 'webm' audio format as a blob
-          const blob = new Blob(chunks, { type: 'audio/wav' });
-          // convert blob to URL so it can be assigned to a audio src attribute
-          console.log('Got blob as : ', blob);
+    this.navigator.getUserMedia(
+      {video: false, audio: true},
+      stream => {
+        this.localStream = stream;
+        let input = this.audioContext.createMediaStreamSource(stream);
+        this.recorder = new this.window.Recorder(input);
+        input.connect(this.analyser);
+        this.recorder.record();
+      },
+      (e) => {
+        alert("Voice input is not available.");
+      }
+    );
+  }
 
-          let formData: FormData = new FormData();
-          formData.append('apikey', environment.apiKeys.webEmpath);
-          formData.append('wav', blob);
-          this.webEmpath.getUserEmotion(formData).subscribe(response => {
-            console.log('Got response as: ', response);
-          });
-          /* this.beyondVerbal.authenticate(blob).subscribe(responseFromBeyondVerbal => {
-            console.log('Response from BeyondVerbal: ', blob);
-          }); */
-
-        }
-      };
-    });
+  scrollToBottom(): void {
+    try {
+        this.myScrollContainer.nativeElement.scrollTop = this.myScrollContainer.nativeElement.scrollHeight;
+    } catch(err) { }                 
   }
 
   startRecognition() {
-    if(!this.utils.isMobile())this.notification.play();
+    if(!this.utils.isMobile()) this.notification.play();
     this.recognition.start();
+    // this.analyzeVoice();
     this.recognition.onresult = event => {
+      // this.recorder.stop();
+      // this.recorder.exportWAV((blob) => {
+      //   console.log('Got blob as : ', blob);
+      //   let formData: FormData = new FormData();
+      //   formData.append('apikey', environment.apiKeys.webEmpath);
+      //   formData.append('wav', blob);
+      //   /* this.webEmpath.getUserEmotion(formData).subscribe(response => {
+      //     console.log('Got response as: ', response);
+      //   }); */
+      //   this.beyondVerbal.authenticate().subscribe(beyondVerbalAccessToken => {
+      //     this.beyondVerbal.startSession().subscribe(beyondVerbalSessionId => {
+      //       let reader = new FileReader();
+      //       reader.readAsArrayBuffer(blob);
+      //       reader.onload = (e) => {
+      //         this.beyondVerbal.sendUpStream(e.target['result']).subscribe(data => {
+      //           console.log('Data from Beyond Verbal: ', data);
+      //         });
+      //       };
+      //     });
+      //   });
+      // }, 'audio/wav');
       this.queryDialogFlow(event.results[0][0].transcript);
     }
   }
@@ -128,23 +153,27 @@ export class ChatComponent implements OnInit {
   }
 
   speakIt(botSaid) {
-    let msg = new SpeechSynthesisUtterance(botSaid);
-    (<any>window).speechSynthesis.speak(msg);
-    msg.onend = (event) => {
-      if(this.messageService.getDialogEndStatus()) {
-        if(!this.userDenied) this.zone.run(() => this.router.navigate(['/emotion']));
-        else {
-          this.suggestionsService.getSuggestionsForUser()
-            .subscribe(videos => {
-              // setting end status to hide chat box;
-              this.dialogEndStatus = true;
-              videos.subscribe(suggestions => {
-                this.suggestions = this.utils.shuffleSuggestions(suggestions[0].concat(suggestions[1]));
-              });
+    let msg = new this.window.SpeechSynthesisUtterance(botSaid);
+    this.window.speechSynthesis.speak(msg);
+    msg.onend = (event) => this.processBotResponse();
+    msg.onerror = (event) => this.processBotResponse();
+  }
+
+  processBotResponse() {
+    if(this.messageService.getDialogEndStatus()) {
+      if(!this.userDenied) this.zone.run(() => this.router.navigate(['/emotion']));
+      else {
+        this.suggestionsService.getSuggestionsForUser()
+          .subscribe(videos => {
+            // setting end status to hide chat box;
+            this.dialogEndStatus = true;
+            videos.subscribe(suggestions => {
+              this.suggestions = this.utils.shuffleSuggestions(suggestions[0].concat(suggestions[1]));
+              this.ref.detectChanges();
             });
-        }
-      } else this.startRecognition();
-    }
+          });
+      }
+    } else this.startRecognition();
   }
 
   composeMessageObject(messageText, sender) {
@@ -154,5 +183,6 @@ export class ChatComponent implements OnInit {
       sender: sender
     });
     this.ref.detectChanges();
+    this.scrollToBottom();
   }
 }

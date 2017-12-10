@@ -1,10 +1,10 @@
 <div class="form-group">
-  <video style="width: 100%; height: 100%;" id="userVideoStream" #userVideoStream autoplay></video>
+  <video class="user-img" id="userVideoStream" #userVideoStream autoplay></video>
   <br>
   <!-- <button class="btn btn-success" (click)="captureUserImage()">Capture User Image</button>
   <button class="btn btn-warning" (click)="stopVideoStream()">Stop User Video Stream</button> -->
   <hr>
-  <canvas #canvasToRenderUserImage width=320 height=240></canvas>
+  <canvas #canvasToRenderUserImage class="user-img"></canvas>
   <hr>
   <h1 *ngIf="userSecondaryEmotion">Your Current Secondary Emotion is: {{ userSecondaryEmotion }}</h1>
   <h1 *ngIf="userPrimaryEmotion">Your Current Primary Emotion is: {{ userPrimaryEmotion }}</h1>
