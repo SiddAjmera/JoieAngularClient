@@ -50,3 +50,46 @@ export const user_intent_scrore = {
         false: -6
     }
 };
+
+export const mood_keyword = {
+    superHappy: {
+        mood: 'Super Happy',
+        youtube: {
+            keywords: 'Happiness, Meditation'
+        },
+        spotify: {
+            keywords: 'Happiness, Meditation',
+            albums: ['6mDTSYtYXDvYwqrnGp7Wba', '0IWSAYk1eweQltmZJaspFv']
+        }
+    },
+    active: {
+        mood: 'Active',
+        youtube: {
+            keywords: 'Light Fitness Songs: Sounds of Nature & Piano Background Music, Background Music For Cooking'
+        },
+        spotify: {
+            keywords: 'Light Fitness Songs: Sounds of Nature & Piano Background Music, Background Music For Cooking',
+            albums: ['5njMahLKD1tLJ5bejvqseV', '2iEFhEBHHYX2h8deMED6a7']
+        }
+    },
+    generalMeditation: {
+        mood: 'General Meditation',
+        youtube: {
+            keywords: 'Music for stress, Anxiety, relaxation, depression, isochronic tones'
+        },
+        spotify: {
+            keywords: 'Music for stress, Anxiety, relaxation, depression, isochronic tones',
+            albums: ['3znG7nJVq2dSLjAbyH3f30', '0XhZXGXV0Knx0z5wkQrRgi', '4kgEUBj2RqWI8XQ40wUJ2z']
+        }
+    },
+    sad : {
+        mood: 'Sad',
+        youtube: {
+            keywords: 'Overcome sadness, Healing Binaural Rain'
+        },
+        spotify: {
+            keywords: 'Overcome sadness, Healing Binaural Rain',
+            albums: ['5lWKhMEB1HAYGo8i3AndCm', '0U18eW5AbZ7LRUeXnVjOha', '4jgqdwxbMP8SiJ8lYHbe41']
+        }
+    }
+};
