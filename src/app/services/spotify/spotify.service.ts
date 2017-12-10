@@ -40,7 +40,7 @@ export class SpotifyService {
             source: 'SPOTIFY',
             title: track.name,
             preview: track.preview_url,
-            deepLink: track.uri,
+            deepLink: `https://open.spotify.com/embed?uri=${track.uri}&theme=white&view=coverart`,
             externalUrl: track.external_urls.spotify,
             largeTN: thumbnailsArray[0],
             mediumTN: thumbnailsArray[1],

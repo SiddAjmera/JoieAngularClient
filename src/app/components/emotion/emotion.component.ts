@@ -18,6 +18,7 @@ declare var tracking: any;
 export class EmotionComponent implements OnInit, AfterViewInit {
 
   context; videoNativeElement; canvasNativeElement; userImage; userPrimaryEmotion; userSecondaryEmotion;
+  retryCount: number = 0;
   @ViewChild('userVideoStream') userVideoStream;
   @ViewChild('canvasToRenderUserImage') canvasToRenderUserImage;
 
@@ -77,7 +78,12 @@ export class EmotionComponent implements OnInit, AfterViewInit {
         // this.zone.run(() => this.router.navigate(['/chat']));
         this.router.navigate(['/chat']);
       } else {
-        this.ngOnInit();
+        if(this.retryCount > 3) {
+          this.router.navigate(['/chat']);
+        } else {
+          this.retryCount++;
+          this.ngOnInit();
+        }
       }
     });
   }

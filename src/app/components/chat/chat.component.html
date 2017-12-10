@@ -36,15 +36,20 @@
       <a *ngIf="suggestion.source === 'SPOTIFY'"
          class="spotify">
         <div class="width-100"> 
-          <img class="card-img" 
+          <!-- <img class="card-img" 
               [src]="suggestion.mediumTN | sanitize"
-              [alt]="suggestion.title" />
+              [alt]="suggestion.title" /> -->
+          <iframe [src]="suggestion.deepLink | sanitize"
+                  frameborder="0" 
+                  allowtransparency="true"
+                  class="width-100">
+          </iframe>
         </div>
         <div class="card-body">    
           <h6 class="card-title">{{ suggestion.title | trimmer: 60 }}</h6>
-          <audio controls class="spotify-audio card-text">
+          <!-- <audio controls class="spotify-audio card-text">
             <source [src]="suggestion.preview | sanitize" type="audio/mpeg">
-          </audio>
+          </audio> -->
         </div>
       </a>
     </div>
