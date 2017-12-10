@@ -10,7 +10,7 @@ import { MessageService } from './../message/message.service';
 import { SpotifyService } from './../spotify/spotify.service';
 import { UserInfoService } from '../user-info/user-info.service';
 import { UtilsService } from './../utils/utils.service';
-import { user_intent_scrore } from '../../app.constants';
+import { user_intent_scrore, mood_keyword} from '../../app.constants';
 import { Observable } from 'rxjs/Observable';
 
 @Injectable()
@@ -49,8 +49,8 @@ export class SuggestionsService {
   getSuggestionsForUser() {
     this.userInfo = this.userInfoService.getUserInfo();
     console.log('this.userInfo', this.userInfo);
-    let score = this.computeScore();
-    let activities = this.suggestActivityForFactor(score);
+    const score = this.computeScore();
+    const activities = this.suggestActivityForFactor(score);
 
     this._messageService.addMessage({
       sender: 'BOT',
@@ -58,10 +58,10 @@ export class SuggestionsService {
       time: new Date().toString()
     });
 
-    let youtubeData =  this.http.get(`https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=5&q=${activities['keywords']}&type=videos&key=${environment.apiKeys.youtubeAPIKey}`)
+    let youtubeData =  this.http.get(`https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=5&q=${activities['youtube']['keywords']}&type=videos&key=${environment.apiKeys.youtubeAPIKey}`)
                            .map(response => this.utilsService.getRelevantYoutubeData(response));
     return this.spotifyService.getAuthToken().map((authToken) => {
-      let spotifyData = this.spotifyService.getSuggestedTracks(authToken, activities['keywords']);
+      let spotifyData = this.spotifyService.getSuggestedTracks(authToken, activities['spotify']['keywords']);
       /* .subscribe((tracks) => {
         console.log('Got the tracks as : ', tracks);
       }); */
@@ -80,23 +80,19 @@ export class SuggestionsService {
   }
 
   suggestActivityForFactor(score) {
-    const factor = {};
-    switch( true ) {
+    let factor = {};
+    switch ( true ) {
       case ( score >= 25 ):
-      factor['mood'] = 'Super Happy';
-      factor['keywords'] = 'Happiness, Meditation';
+        factor = mood_keyword['superHappy'];
       break;
       case ( score > 15 && score < 25):
-      factor['mood'] = 'Active';
-      factor['keywords'] = 'Light Fitness Songs: Sounds of Nature & Piano Background Music, Background Music For Cooking';
+        factor = mood_keyword['active'];
       break;
       case ( score >= 5 && score < 15):
-      factor['mood'] = 'General Meditation';
-      factor['keywords'] = 'Music for stress, Anxiety, relaxation, depression, isochronic tones';
+        factor = mood_keyword['generalMeditation'];
       break;
       case ( score < 5 ):
-      factor['mood'] = 'Sad';
-      factor['keywords'] = 'Overcome sadness, Healing Binaural Rain';
+        factor = mood_keyword['sad'];
       break;
       // case for sleep
     }
